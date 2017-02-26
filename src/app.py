@@ -38,13 +38,11 @@ def upload():
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
 
-            print os.path.isfile(os.path.join(UPLOAD_FOLDER, filename))
+            if os.path.isfile(os.path.join(UPLOAD_FOLDER, filename)):
+                return jsonify({"Filename": filename})
+            else:
+                return jsonify({"Error": "Could not save image properly"})
 
-
-            # do your processing
-
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
     return '''
     <!doctype html>
     <title>Upload new File</title>
