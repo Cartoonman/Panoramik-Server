@@ -64,8 +64,10 @@ def uploadImage():
     if request.method == 'POST':
         encodedData = request.form['file']
         if encodedData:
-            with open(os.path.join(UPLOAD_FOLDER, "imageToSave.png"), "wb") as fh:
+            filename = "imageToSave.png"
+            with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as fh:
                 fh.write(encodedData.decode('base64'))
+            print os.path.isfile(os.path.join(UPLOAD_FOLDER, filename))
             return jsonify({"Result": "Succeeded"})
         else:
             return jsonify({"Result": "Failed, could not find files"})
