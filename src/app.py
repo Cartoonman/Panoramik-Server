@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, flash, redirect, url_for
+from flask import Flask, request, flash, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 import cv2
 
@@ -28,6 +28,7 @@ def upload():
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
+        print file
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
@@ -36,6 +37,12 @@ def upload():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+            print os.path.isfile(os.path.join(UPLOAD_FOLDER, filename))
+
+
+            # do your processing
+
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     return '''
@@ -52,5 +59,18 @@ def upload():
 def uploaded_file():
     return "uploaded file successfully"
 
+@app.route("/uploadImage", methods=['GET', 'POST'])
+def uploadImage():
+    if request.method == 'POST':
+        encodedData = request.form['file']
+        if encodedData:
+            with open(os.path.join(UPLOAD_FOLDER, "imageToSave.png"), "wb") as fh:
+                fh.write(encodedData.decode('base64'))
+            return jsonify({"Result": "Succeeded"})
+        else:
+            return jsonify({"Result": "Failed, could not find files"})
+    else:
+        return jsonify({"Error": "POST Request Only"})
+
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0")
