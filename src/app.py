@@ -67,7 +67,7 @@ def uploadImage():
             with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as fh:
                 fh.write(encodedData.decode('base64'))
             print os.path.isfile(os.path.join(UPLOAD_FOLDER, filename))
-            result = processimage.run(os.path.join(UPLOAD_FOLDER, filename)], BASE_DIR)
+            result = processimage.run(os.path.join(UPLOAD_FOLDER, filename), BASE_DIR)
             
             return jsonify(result)
             #return jsonify({"Result": "Succeeded"})
