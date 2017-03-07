@@ -175,65 +175,65 @@ def run(filepath, BASE_DIR):
     return results
 
    
-	"""
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GREYSCALE (SINGLE CHANNEL) MSER
+"""
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GREYSCALE (SINGLE CHANNEL) MSER
 
-    #g_mser = cv2.MSER_create(5, 500, 14400, 0.25, 0.2) #<- Default
+#g_mser = cv2.MSER_create(5, 500, 14400, 0.25, 0.2) #<- Default
 
-    g_mser = cv2.MSER(5, minthres, maxthres, 0.25, 0.2) 
-
-    
-
-    
-
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    
-
-    g_vis = img.copy()
-
-    
-
-
-
-    #GRAYSCALE MSER
-
-    g_regions = g_mser.detect(gray, None)
-
-    g_hulls = [cv2.convexHull(p.reshape(-1, 1, 2)) for p in g_regions]
-
-    
-
-    top_regions = sorted(map(lambda x: (PolyArea(np.array(map(mapx,x)), np.array(map(mapy,x))), x, sorted(map(mapx,x))[0], sorted(map(mapx,x),reverse=True)[0]), g_hulls), key=lambda y: y[0], reverse=True)[:5]
-
-    #top_regions sample output: (area, numpy_array(region), min x coord, max x coord)
-
-    
-
-    cv2.polylines(g_vis, g_hulls, 1, (0, 255, 0))
-
-    cv2.polylines(g_vis, map(lambda x: x[1], top_regions), 1, (0, 0, 255))
-
-    
-
-
-
-    cv2.imwrite('/media/sf_Ubuntu_Shared/g_result.jpg', g_vis)
+g_mser = cv2.MSER(5, minthres, maxthres, 0.25, 0.2) 
 
 
 
 
 
-
-
-    #cv2.imshow('img', vis)
-
-    #cv2.waitKey()
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 
 
-    cv2.destroyAllWindows()
-    
-    """
+g_vis = img.copy()
+
+
+
+
+
+#GRAYSCALE MSER
+
+g_regions = g_mser.detect(gray, None)
+
+g_hulls = [cv2.convexHull(p.reshape(-1, 1, 2)) for p in g_regions]
+
+
+
+top_regions = sorted(map(lambda x: (PolyArea(np.array(map(mapx,x)), np.array(map(mapy,x))), x, sorted(map(mapx,x))[0], sorted(map(mapx,x),reverse=True)[0]), g_hulls), key=lambda y: y[0], reverse=True)[:5]
+
+#top_regions sample output: (area, numpy_array(region), min x coord, max x coord)
+
+
+
+cv2.polylines(g_vis, g_hulls, 1, (0, 255, 0))
+
+cv2.polylines(g_vis, map(lambda x: x[1], top_regions), 1, (0, 0, 255))
+
+
+
+
+
+cv2.imwrite('/media/sf_Ubuntu_Shared/g_result.jpg', g_vis)
+
+
+
+
+
+
+
+#cv2.imshow('img', vis)
+
+#cv2.waitKey()
+
+
+
+cv2.destroyAllWindows()
+
+"""
 
 
