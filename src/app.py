@@ -2,7 +2,8 @@ import os
 
 from flask import Flask, request, flash, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-import cv2
+import subprocess
+import processimage
 
 from utils import allowed_file
 
@@ -66,7 +67,10 @@ def uploadImage():
             with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as fh:
                 fh.write(encodedData.decode('base64'))
             print os.path.isfile(os.path.join(UPLOAD_FOLDER, filename))
-            return jsonify({"Result": "Succeeded"})
+            result = processimage.run(os.path.join(UPLOAD_FOLDER, filename)], BASE_DIR)
+            
+            return jsonify(result)
+            #return jsonify({"Result": "Succeeded"})
         else:
             return jsonify({"Result": "Failed, could not find files"})
     else:
