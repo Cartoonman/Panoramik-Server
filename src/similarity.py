@@ -98,7 +98,7 @@ def hamming(x,y):
 if __name__ == '__main__':
     import sys, os
 
-    hashmethod = sys.argv[1] if len(sys.argv) > 1
+    hashmethod = sys.argv[1]
     if hashmethod == 'ahash':
         hashfunc = imagehash.average_hash
     elif hashmethod == 'phash':
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     elif hashmethod == 'whash-db4':
         hashfunc = lambda img: imagehash.whash(img, mode='db4')
 
-    userpath = sys.argv[2] if len(sys.argv) > 2 else "."
+    userpath = sys.argv[2]
     find_similar_images(userpath=userpath, hashfunc=hashfunc)
 
 
