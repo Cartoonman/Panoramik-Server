@@ -134,7 +134,7 @@ def run(filepath, BASE_DIR):
 
     
 
-    p1 = subprocess.call(["python", os.path.join(BASE_DIR,"src/similarity.py"),'phash', 'tmp/'], );
+    p1 = subprocess.call(["python", os.path.join(BASE_DIR,"src/similarity.py"),'phash', '/tmp/'], );
     p2 = subprocess.call(["python", os.path.join(BASE_DIR,"src/csdele.py")], );
 
     
