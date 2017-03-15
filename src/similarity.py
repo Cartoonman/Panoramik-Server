@@ -10,6 +10,8 @@ from numpy import array
 """
 Demo of hashing
 """
+error_bounds = 17
+
 def find_similar_images(userpath, hashfunc = imagehash.average_hash):
     import os
     def is_image(filename):
@@ -23,22 +25,13 @@ def find_similar_images(userpath, hashfunc = imagehash.average_hash):
     for img in sorted(image_filenames):
         h = hashfunc(Image.open(img))
         for x in images.keys():
-            if hamming(str2hex(x),str2hex(str(h))) < 17:
+            if hamming(str2hex(x),str2hex(str(h))) < error_bounds:
                 images2[str(h)].add(img)
                 images2[str(h)].add(images[x][0])
         
             #print(hamming(str2hex(x),str2hex(str(h))))
         images[str(h)] = images.get(str(h), []) + [img]
         
-        
-    for k, img_list in six.iteritems(images):
-        if len(img_list) > 1:
-            print(" ".join(img_list))
-            #lv = Levenshtein.distance(img_list[0], img_list[1])
-    print('_________________________________')
-    for k, img_list in six.iteritems(images2):
-        print(" ".join(img_list))
-        #lv = Levenshtein.distance(img_list[0], img_list[1])
     setlist = []
     for k, img_list in six.iteritems(images2):
         setlist = inset(setlist, img_list)

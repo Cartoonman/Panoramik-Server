@@ -38,7 +38,10 @@ def upload():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(UPLOAD_FOLDER, filename))
-
+            
+            result = run_analysis(filename)
+            return jsonify(result)
+            
             if os.path.isfile(os.path.join(UPLOAD_FOLDER, filename)):
                 return jsonify({"Filename": filename})
             else:
@@ -66,8 +69,8 @@ def uploadImage():
             filename = "imageToSave.png"
             with open(os.path.join(UPLOAD_FOLDER, filename), "wb") as fh:
                 fh.write(encodedData.decode('base64'))
-            print os.path.isfile(os.path.join(UPLOAD_FOLDER, filename))
-            result = processimage.run(os.path.join(UPLOAD_FOLDER, filename), BASE_DIR)
+                print os.path.isfile(os.path.join(UPLOAD_FOLDER, filename))
+            result = run_analysis(filename)
             
             return jsonify(result)
             #return jsonify({"Result": "Succeeded"})
@@ -75,6 +78,13 @@ def uploadImage():
             return jsonify({"Result": "Failed, could not find files"})
     else:
         return jsonify({"Error": "POST Request Only"})
+        
+        
+def run_analysis(filename):
+    return processimage.run(os.path.join(UPLOAD_FOLDER, filename), BASE_DIR)
+
+            
+            
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

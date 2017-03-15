@@ -14,7 +14,7 @@ FLAG = False
 global BREAK
 BREAK = False
 
-auth = cloudsight.OAuth('yrrsdv08vD054qGNV710Sg', 'Qm7T0L8LqZgStVby1CT_4g')
+auth = cloudsight.OAuth('INYOTJsHDsOPb2dOx-yfHw', 'qf6ScaShCOeqxEExSNMPNw')
 api = cloudsight.API(auth)
 result = {}
 
@@ -27,26 +27,37 @@ def doWork():
                 return
             else:
                 continue
-        try:
-            with open(image, 'rb') as f:
-                response = api.image_request(f, image, {
-                'image_request[locale]': 'en-US',
-            })
-            status = api.wait(response['token'], timeout=30)
-        except Exception as e:
-            print e
-            q.task_done()
-            return
+        while True:
+            try:
+                with open(image, 'rb') as f:
+                    response = api.image_request(f, image, {
+                    'image_request[locale]': 'en-US',})
+                    while True:
+                        status = api.wait(response['token'], timeout=30)
+                        if status['status'] == 'not completed':
+                            continue
+                        break
+                
+            except Exception as e:
+                print e
+                if 'exceeded' in str(e):
+                    time.sleep(3)
+                    continue
+                q.task_done()
+                return
+            break
         doSomethingWithResult(image, status)
         q.task_done()
 
 def doSomethingWithResult(image, status):
+    print image , status
+    if status['status'] == 'timeout':
+        pass
     if status['status'] == 'completed':
         result[image] = (status['status'], status['name'])
     else:
         result[image] = (status['status'], status['reason'])
 
-    print image , status
   
 threads = []
 q = Queue(concurrent * 2)
@@ -56,9 +67,9 @@ for i in range(concurrent):
     t.start()
 try:
     for filename in glob.glob('/tmp/*.jpg'): #assuming gif
-        time.sleep(3.05)
+        time.sleep(3.1)
         q.put(filename)
-        break
+        #break ## REMOVE FOR FULL PROCESSING. RIGHT NOW ONLY 1 IMAGE WILL BE SENT.
     FLAG = True  
     while True:
         if q.empty() == False:
