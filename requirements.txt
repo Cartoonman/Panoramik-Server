@@ -17,4 +17,5 @@ olefile==0.44
 Pillow==4.0.0
 PyWavelets==0.5.1
 scipy==0.18.1
+redis==2.10.5
 

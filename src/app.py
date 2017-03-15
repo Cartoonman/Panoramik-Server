@@ -2,13 +2,17 @@ import os
 
 from flask import Flask, request, flash, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-import subprocess
-import processimage
+from processimage import run
+from rq import Queue
+from worker import conn
 
 from utils import allowed_file
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
+q = Queue(connection=conn)
+
+
 
 app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
@@ -81,9 +85,7 @@ def uploadImage():
         
         
 def run_analysis(filename):
-    return processimage.run(os.path.join(UPLOAD_FOLDER, filename), BASE_DIR)
-
-            
+    return q.enqueue(run, os.path.join(UPLOAD_FOLDER, filename), BASE_DIR)        
             
 
 if __name__ == "__main__":
