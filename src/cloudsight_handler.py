@@ -1,5 +1,5 @@
 from __future__ import division
-from threading import Thread, activeCount
+from threading import Thread
 from cloudsight import API, OAuth
 from math import ceil
 import time
