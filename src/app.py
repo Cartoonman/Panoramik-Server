@@ -58,12 +58,18 @@ def upload(): #DEBUG ONLY
     else:
         return '''
         <!doctype HTML>
+        <html>
+        <head>
         <title>Upload new File</title>
+        </head>
+        <body>
         <h1>Upload new File</h1>
         <form method=post enctype=multipart/form-data>
           <p><input type=file name=file>
              <input type=submit value=Upload>
         </form>
+        </body>
+        </html>
         '''
     
 @app.route("/status", methods=['GET'])

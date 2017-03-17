@@ -1,5 +1,7 @@
+from __future__ import division
 from threading import Thread, activeCount
 from cloudsight import API, OAuth
+from math import ceil
 import time
 import os
 import sys
@@ -19,9 +21,10 @@ api = API(OAuth(CLOUDSIGHT_API_KEY, CLOUDSIGHT_API_SECRET))
 q = Queue(concurrent * 2)
 threads = []
 result = {}
-
+done = 0
 
 def fetch():
+    global done
     while(True):
         try:
             image = q.get(True,1)
@@ -46,12 +49,26 @@ def fetch():
                 if 'exceeded' in str(e):
                     time.sleep(3)
                     continue
+                done = done + 1
                 q.task_done()
                 return
             break
         process_result(image, status)
+        done = done + 1
         q.task_done()
-        return
+
+def monitor(files):
+    global done
+    a = 0
+    while True:
+        incr = int(ceil((40/files) * done))
+        while a < incr:
+            update_progress(None,1)   
+            a = a + 1 
+        if a == 40:
+            q.task_done()
+            return
+
 
 def process_result(image, status):
     print image , status
@@ -68,17 +85,14 @@ def get_results():
         t = Thread(target=fetch)
         threads.append(t)
         t.start()
-    num_files = len(glob.glob('/tmp/*.jpg'))
-    print num_files
-    count = 0
+    t = Thread(target=monitor, args=(len(glob.glob('/tmp/*.jpg')),))
+    threads.append(t)
+    t.start()
     try:
-        for filename in glob.glob('/tmp/*.jpg'): #assuming gif
+        for filename in glob.glob('/tmp/*.jpg'): 
             time.sleep(3.1)
             q.put(filename)
-            count = count + 1
-            if count == 5:
-                break
-            #break ## REMOVE FOR FULL PROCESSING. RIGHT NOW ONLY 1 IMAGE WILL BE SENT.
+            break ## REMOVE FOR FULL PROCESSING. RIGHT NOW ONLY 1 IMAGE WILL BE SENT.
         FLAG = True  
         while True:
             if q.empty() == False:

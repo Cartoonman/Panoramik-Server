@@ -11,8 +11,8 @@ def initialize_progress():
     job.meta['state'] = "Starting"
     job.save()
            
-def update_progress(state=None):
-    job.meta['progress'] = job.meta['progress'] + 10
+def update_progress(state=None, cs=0):    
+    job.meta['progress'] = job.meta['progress'] + 10 if cs == 0 else job.meta['progress'] + cs
     if state is not None:
         job.meta['state'] = state
     job.save()
