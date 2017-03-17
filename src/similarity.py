@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 from __future__ import (absolute_import, division, print_function)
 from PIL import Image
 import six
@@ -7,9 +8,7 @@ import imagehash
 import subprocess
 from numpy import array
 
-"""
-Demo of hashing
-"""
+
 error_bounds = 17
 
 def find_similar_images(userpath, hashfunc = imagehash.average_hash):

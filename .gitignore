@@ -3,3 +3,4 @@ venv
 *.pyc
 uploads/*
 src/output.txt
+.env
