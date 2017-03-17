@@ -6,7 +6,7 @@ import time
 import os
 import sys
 from Queue import Queue
-import glob
+from glob import glob
 from rq import get_current_job
 from utils import update_progress
 
@@ -85,11 +85,11 @@ def get_results():
         t = Thread(target=fetch)
         threads.append(t)
         t.start()
-    t = Thread(target=monitor, args=(len(glob.glob('/tmp/*.jpg')),))
+    t = Thread(target=monitor, args=(len(glob('/tmp/*.jpg')),))
     threads.append(t)
     t.start()
     try:
-        for filename in glob.glob('/tmp/*.jpg'): 
+        for filename in glob('/tmp/*.jpg'): 
             time.sleep(3.1)
             q.put(filename)
             break ## REMOVE FOR FULL PROCESSING. RIGHT NOW ONLY 1 IMAGE WILL BE SENT.

@@ -1,24 +1,22 @@
-#!/usr/bin/env python
-
 from __future__ import (absolute_import, division, print_function)
+import os
 from PIL import Image
 import six
 from collections import defaultdict
 import imagehash
 import subprocess
 from numpy import array
+from utils import allowed_file, update_progress
+from glob import glob
 
 
 error_bounds = 17
 
-def find_similar_images(userpath, hashfunc = imagehash.average_hash):
-    import os
-    def is_image(filename):
-        f = filename.lower()
-        return f.endswith(".png") or f.endswith(".jpg") or \
-            f.endswith(".jpeg") or f.endswith(".bmp") or f.endswith(".gif")
+def filter_duplicates():
+    update_progress('Pruning Duplicates')
+    hashfunc = imagehash.phash
     
-    image_filenames = [os.path.join(userpath, path) for path in os.listdir(userpath) if is_image(path)]
+    image_filenames = [filename for filename in glob('/tmp/*.jpg')]
     images = {}
     images2 = defaultdict(set)
     for img in sorted(image_filenames):
@@ -56,6 +54,26 @@ def find_similar_images(userpath, hashfunc = imagehash.average_hash):
             except OSError:
                 pass"""
 
+
+def merge(lsts):
+  sets = [set(lst) for lst in lsts if lst]
+  merged = 1
+  while merged:
+    merged = 0
+    results = []
+    while sets:
+      common, rest = sets[0], sets[1:]
+      sets = []
+      for x in rest:
+        if x.isdisjoint(common):
+          sets.append(x)
+        else:
+          merged = 1
+          common |= x
+      results.append(common)
+    sets = results
+  return sets
+
 def inset(x,y):
     for a in x:
         for z in y:
@@ -85,23 +103,5 @@ def hamming(x,y):
         z &= z-1 # magic!
     return count
 
-
-if __name__ == '__main__':
-    import sys, os
-
-    hashmethod = sys.argv[1]
-    if hashmethod == 'ahash':
-        hashfunc = imagehash.average_hash
-    elif hashmethod == 'phash':
-        hashfunc = imagehash.phash
-    elif hashmethod == 'dhash':
-        hashfunc = imagehash.dhash
-    elif hashmethod == 'whash-haar':
-        hashfunc = imagehash.whash
-    elif hashmethod == 'whash-db4':
-        hashfunc = lambda img: imagehash.whash(img, mode='db4')
-
-    userpath = sys.argv[2]
-    find_similar_images(userpath=userpath, hashfunc=hashfunc)
-
-
+    
+    

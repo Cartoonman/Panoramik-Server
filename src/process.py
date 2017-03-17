@@ -4,10 +4,12 @@ import cv2
 import math
 import sys
 import subprocess
-import os, glob
+import os
+from glob import glob
 import boto3
 from utils import initialize_progress, update_progress, mapx, mapy
 from cloudsight_handler import get_results
+from dup_filter import filter_duplicates
 
 # Utility Functions
 """
@@ -57,7 +59,7 @@ def get_image(filename, UPLOAD_FOLDER):
 
 def clear_cache():
     update_progress('Clearing Cache')
-    files = glob.glob('/tmp/*.jpg')
+    files = glob('/tmp/*.jpg')
     for f in files:
         os.remove(f)
 
@@ -92,8 +94,7 @@ def run(filename, UPLOAD_FOLDER, BASE_DIR):
     pathlist = generate_subimages(hulls, img, x_len, y_len) 
       
     # Duplicate Removal
-    update_progress('Pruning Duplicates')
-    subprocess.call(["python", os.path.join(BASE_DIR,"src/similarity.py"), 'phash', '/tmp/'], )
+    filter_duplicates()
     
     # Cloudsight Results
     results = get_results()
