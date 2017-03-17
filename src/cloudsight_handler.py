@@ -3,8 +3,8 @@ from threading import Thread
 from cloudsight import API, OAuth
 from math import ceil
 import time
-import os
 import sys
+import os
 from Queue import Queue
 from glob import glob
 from rq import get_current_job
