@@ -78,6 +78,7 @@ def get_status():
     if job_id:      
         job = q.fetch_job(job_id)    
         if job is not None:
+            job.refresh()
             status = job.status
             if (status == 'started'):
                 print status
