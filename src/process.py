@@ -76,7 +76,7 @@ def mser_detect(img, x_len, y_len):
     
     
 
-def run(filename, UPLOAD_FOLDER, BASE_DIR):
+def run_process(filename, UPLOAD_FOLDER, BASE_DIR):
 
     initialize_progress()  
     img = get_image(filename, UPLOAD_FOLDER)
