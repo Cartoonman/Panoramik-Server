@@ -1,16 +1,15 @@
 import os
-
 from flask import Flask, request, flash, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-from process import run_process
+import proc 
 from rq import Queue
-from worker import conn
 from boto3 import client
-from utils import allowed_file
+import utils
+import redis
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
-
+conn = redis.from_url(os.environ.get("REDIS_URL"))
 q = Queue(connection=conn) #redis rq queue 
 
 app = Flask(__name__)
@@ -24,7 +23,7 @@ def s3_upload(filename):
         
         
 def run_analysis(filename):
-    return q.enqueue(run_process, filename, UPLOAD_FOLDER, BASE_DIR)        
+    return q.enqueue(proc.run_process, filename, UPLOAD_FOLDER, BASE_DIR)        
 
 @app.route("/")
 def home():
@@ -45,7 +44,7 @@ def upload(): #DEBUG ONLY
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file and allowed_file(file.filename):
+        if file and utils.allowed_file(file.filename):
             filename = secure_filename(file.filename) # filename here serves as key for now
             file.save(os.path.join(UPLOAD_FOLDER, filename))
                 

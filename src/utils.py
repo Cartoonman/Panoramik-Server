@@ -17,6 +17,12 @@ def update_progress(state=None, cs=0):
         job.meta['state'] = state
     job.save()
     
+def set_failed():
+    job.set_status('failed')   
+ 
+def is_failed():
+    return job.is_failed
+    
 def mapx(c):
     return c[0][0]
 

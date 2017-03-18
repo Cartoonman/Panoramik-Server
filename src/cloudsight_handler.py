@@ -3,12 +3,10 @@ from threading import Thread
 from cloudsight import API, OAuth
 from math import ceil
 import time
-import sys
 import os
 from Queue import Queue
 from glob import glob
-from rq import get_current_job
-from utils import update_progress
+from utils import update_progress, set_failed, is_failed
 
 
 concurrent = 5
@@ -23,6 +21,15 @@ threads = []
 result = {}
 done = 0
 
+
+class MultiThreadException(Exception):
+    pass
+
+def fail_check():
+    if is_failed():
+        BREAK = True
+        raise MultiThreadException("Critical Error, Cannot Continue")
+        
 def fetch():
     global done
     while(True):
@@ -35,6 +42,7 @@ def fetch():
                 continue
         while True:
             try:
+                status = None
                 with open(image, 'rb') as f:
                     response = api.image_request(f, image, {
                     'image_request[locale]': 'en-US',})
@@ -43,13 +51,13 @@ def fetch():
                         if status['status'] == 'not completed':
                             continue
                         break
-                
+                break
             except Exception as e:
                 print e
                 if 'exceeded' in str(e):
                     time.sleep(3)
                     continue
-                done = done + 1
+                set_failed()
                 q.task_done()
                 return
             break
@@ -71,9 +79,9 @@ def monitor(files):
 
 
 def process_result(image, status):
+    if status is None or status['status'] == 'timeout':
+        return
     print image , status
-    if status['status'] == 'timeout':
-        pass
     if status['status'] == 'completed':
         result[image] = (status['status'], status['name'])
     else:
@@ -88,20 +96,18 @@ def get_results():
     t = Thread(target=monitor, args=(len(glob('/tmp/*.jpg')),))
     threads.append(t)
     t.start()
-    try:
-        for filename in glob('/tmp/*.jpg'): 
-            time.sleep(3.1)
-            q.put(filename)
-            break ## REMOVE FOR FULL PROCESSING. RIGHT NOW ONLY 1 IMAGE WILL BE SENT.
-        FLAG = True  
-        while True:
-            if q.empty() == False:
-                time.sleep(1)
-            else:
-                break
-    except KeyboardInterrupt:
-        print "Alas poor port scanner..."
-        BREAK = True
-        sys.exit(1)
+    
+    for filename in glob('/tmp/*.jpg'): 
+        fail_check()
+        time.sleep(3.1)
+        q.put(filename)
+        break ## REMOVE FOR FULL PROCESSING. RIGHT NOW ONLY 1 IMAGE WILL BE SENT.
+    FLAG = True  
+    while True:
+        if q.empty() == False:
+            fail_check()
+            time.sleep(1)
+        else:
+            break
     q.join()
     return result
