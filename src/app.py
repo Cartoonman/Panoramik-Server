@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, request, flash, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-from theprocess import run_process
+from process import run_process
 from rq import Queue
 from worker import conn
 from boto3 import client
