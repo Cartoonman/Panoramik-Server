@@ -2,8 +2,6 @@
 
 import cv2
 import math
-import sys
-import subprocess
 import os
 from glob import glob
 import boto3
