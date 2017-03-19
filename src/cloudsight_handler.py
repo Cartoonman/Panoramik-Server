@@ -48,6 +48,7 @@ def fetch():
                     'image_request[locale]': 'en-US',})
                     while True:
                         status = api.wait(response['token'], timeout=30)
+                        print status
                         if status['status'] == 'not completed':
                             continue
                         break
@@ -93,6 +94,7 @@ def get_results():
         t = Thread(target=fetch)
         threads.append(t)
         t.start()
+    print len(glob('/tmp/*.jpg'))
     t = Thread(target=monitor, args=(len(glob('/tmp/*.jpg')),))
     threads.append(t)
     t.start()

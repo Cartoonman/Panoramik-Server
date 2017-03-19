@@ -80,6 +80,7 @@ def get_status():
         if job is not None:
             job.refresh()
             status = job.status
+            print status
             if (status == 'started'):
                 print status
                 print job.meta

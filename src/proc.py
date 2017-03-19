@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-
+from __future__ import division
 import cv2
 import math
 import os
 from glob import glob
 import boto3
-from utils import initialize_progress, update_progress, mapx, mapy
+from utils import initialize_progress, update_progress, mapx, mapy, set_finished
 from cloudsight_handler import get_results
 from dup_filter import filter_duplicates
 
@@ -29,7 +29,8 @@ def generate_subimages(hulls, img, h, v):
     coords = edge_coordinates(hulls)
     
     for c in coords:
-        if  (c[3]-c[1] > int(h *.45)) or (c[4]-c[2] > int(v *.45)):
+        if  (c[3]-c[1] > int(h *.45)) or (c[4]-c[2] > int(v *.45)): 
+            """or (min(c[3]-c[1],c[4]-c[2])/max(c[3]-c[1],c[4]-c[2]) < 0.25):"""
             continue
         #if c_vis is not None:
         #    cv2.rectangle(c_vis,(max(c[1],0),max(c[2],0)),(max(c[1],0)+(c[3]-c[1]), max(c[2],0)+(c[4]-c[2])),(255,0,0),2)
@@ -75,7 +76,7 @@ def mser_detect(img, x_len, y_len):
     
 
 def run_process(filename, UPLOAD_FOLDER, BASE_DIR):
-
+    print os.getpid()
     initialize_progress()  
     img = get_image(filename, UPLOAD_FOLDER)
     
@@ -115,6 +116,7 @@ def run_process(filename, UPLOAD_FOLDER, BASE_DIR):
     #cv2.rectangle(c_vis,(x,y),(x+w,y+h),(255,0,0),2)
     print BASE_DIR
     cv2.imwrite(BASE_DIR + '/uploads/result.jpg', img)
+    set_finished()
     return results
     #return {}
 
