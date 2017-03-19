@@ -23,7 +23,9 @@ def s3_upload(filename):
         
         
 def run_analysis(filename):
-    return q.enqueue(proc.run_process, filename)        
+    j = q.enqueue(proc.run_process, filename)   
+    utils.initialize_progress(j)     
+    return j
 
 @app.route("/")
 def home():
@@ -73,17 +75,13 @@ def upload(): #DEBUG ONLY
     
 @app.route("/status", methods=['GET'])
 def get_status():
-    print request.args.get("job_id")  
     job_id = request.args.get("job_id")  
     if job_id:      
         job = q.fetch_job(job_id)    
         if job is not None:
             job.refresh()
             status = job.status
-            print status
             if (status == 'started'):
-                print status
-                print job.meta
                 return jsonify({'status':"RUNNING",'message':"Please wait, processing",'progress':job.meta['progress'], 'state':job.meta['state']})
             elif status == 'queued':
                 return jsonify({'status':"WAIT",'message':"Please wait, queued"})

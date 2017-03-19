@@ -23,11 +23,34 @@ def hamming(p1,p2):
         count += 1
         z &= z-1 # magic!
     return count           
+    
+def merge(lsts):
+    sets = [set(lst) for lst in lsts if lst]
+    merged = 1
+    while merged:
+        merged = 0
+        results = []
+        while sets:
+            common, rest = sets[0], sets[1:]
+            sets = []
+            for x in rest:
+                if x.isdisjoint(common):
+                    sets.append(x)
+                else:
+                    merged = 1
+                    common |= x
+            results.append(common)
+        sets = results
+    return sets
+def image_size(f):    
+    size = reduce(lambda x,y: x*y, f.size)        
+    f.close()
+    return size   
            
-def initialize_progress():
-    job.meta['progress'] = 0
-    job.meta['state'] = "Starting"
-    job.save()
+def initialize_progress(j):
+    j.meta['progress'] = 0
+    j.meta['state'] = "Ready"
+    j.save()
            
 def update_progress(state=None, cs=0):    
     job.meta['progress'] = job.meta['progress'] + 10 if cs == 0 else job.meta['progress'] + cs

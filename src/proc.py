@@ -5,7 +5,7 @@ import math
 import os
 from glob import glob
 import boto3
-from utils import initialize_progress, update_progress, mapx, mapy, set_finished
+import utils
 from cloudsight_handler import get_results
 from dup_filter import filter_duplicates
 
@@ -14,14 +14,14 @@ from dup_filter import filter_duplicates
 Returns list of hull data as well as edge coordinates for bounding rectangle calculation
 """
 def edge_coordinates(hulls):
-    return map(lambda c: (c, sorted(map(mapx,c))[0], sorted(map(mapy,c))[0], sorted(map(mapx,c),reverse=True)[0], sorted(map(mapy,c),reverse=True)[0]), hulls)
+    return map(lambda c: (c, sorted(map(utils.mapx,c))[0], sorted(map(utils.mapy,c))[0], sorted(map(utils.mapx,c),reverse=True)[0], sorted(map(utils.mapy,c),reverse=True)[0]), hulls)
     
     
 """
 Returns list of hull data as well as edge coordinates for bounding rectangle calculation
 """  
 def generate_subimages(hulls, img, h, v):
-    update_progress('Extracting Regions')
+    utils.update_progress('Extracting Regions')
     padding = 1.15
     fid = 0 
     pathlist = []
@@ -51,18 +51,22 @@ def generate_subimages(hulls, img, h, v):
 
 def get_image(filename):
     s3 = boto3.client('s3')
-    update_progress('Downloading Image')
+    utils.update_progress('Downloading Image')
     s3.download_file(os.environ.get("S3_BUCKET"), filename, 'uploads/' + filename)
     return cv2.imread('uploads/' + filename)
+    
+def upload_result(filename):
+    s3 = boto3.client('s3')
+    s3.upload_file('uploads/result.jpg', os.environ.get("S3_BUCKET"), 'results/' + filename)    
 
 def clear_cache():
-    update_progress('Clearing Cache')
+    utils.update_progress('Clearing Cache')
     files = glob('/tmp/*.jpg')
     for f in files:
         os.remove(f)
 
 def mser_detect(img, x_len, y_len):
-    update_progress('Detecting Regions')
+    utils.update_progress('Detecting Regions')
     
     min_t = int(math.floor((y_len*x_len)*0.0009))
     max_t = int(math.floor((y_len*x_len)*0.05))
@@ -75,7 +79,6 @@ def mser_detect(img, x_len, y_len):
     
 
 def run_process(filename):
-    initialize_progress()  
     img = get_image(filename)
     
     clear_cache()
@@ -113,7 +116,8 @@ def run_process(filename):
 
     #cv2.rectangle(c_vis,(x,y),(x+w,y+h),(255,0,0),2)
     cv2.imwrite('uploads/result.jpg', img)
-    set_finished()
+    upload_result(filename)
+    utils.set_finished()
     return results
     #return {}
 
@@ -147,7 +151,7 @@ g_hulls = [cv2.convexHull(p.reshape(-1, 1, 2)) for p in g_regions]
 
 
 
-top_regions = sorted(map(lambda x: (PolyArea(np.array(map(mapx,x)), np.array(map(mapy,x))), x, sorted(map(mapx,x))[0], sorted(map(mapx,x),reverse=True)[0]), g_hulls), key=lambda y: y[0], reverse=True)[:5]
+top_regions = sorted(map(lambda x: (PolyArea(np.array(map(utils.mapx,x)), np.array(map(utils.mapy,x))), x, sorted(map(utils.mapx,x))[0], sorted(map(utils.mapx,x),reverse=True)[0]), g_hulls), key=lambda y: y[0], reverse=True)[:5]
 
 #top_regions sample output: (area, numpy_array(region), min x coord, max x coord)
 
