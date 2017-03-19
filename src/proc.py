@@ -20,7 +20,7 @@ def edge_coordinates(hulls):
 """
 Returns list of hull data as well as edge coordinates for bounding rectangle calculation
 """  
-def generate_subimages(hulls, img, h, v):
+def generate_subimages(hulls, img, h, v, folder = '/tmp/'):
     utils.update_progress('Extracting Regions')
     padding = 1.15
     fid = 0 
@@ -29,20 +29,20 @@ def generate_subimages(hulls, img, h, v):
     coords = edge_coordinates(hulls)
     
     for c in coords:
-        if  (c[3]-c[1] > int(h *.45)) or (c[4]-c[2] > int(v *.45)): 
-            """or (min(c[3]-c[1],c[4]-c[2])/max(c[3]-c[1],c[4]-c[2]) < 0.25):"""
-            continue
         #if c_vis is not None:
         #    cv2.rectangle(c_vis,(max(c[1],0),max(c[2],0)),(max(c[1],0)+(c[3]-c[1]), max(c[2],0)+(c[4]-c[2])),(255,0,0),2)
-        fid += 1
+        
         minx = c[1] - (int(c[1]*padding) - c[1])
         maxx = int(c[3]*padding)
         miny = c[2] - (int(c[2]*padding) - c[2])
         maxy = int(c[4]*padding)
-
+        
+        if  (c[3]-c[1] > int(h *.45)) or (c[4]-c[2] > int(v *.45)) or (min(maxy-miny,maxx-minx)/max(maxy-miny,maxx-minx) < 0.30):
+            continue
+        
         roi=img[max(miny, 0):max(miny, 0)+(maxy-miny),max(minx,0):max(minx,0)+(maxx-minx)]
-
-        path = '/tmp/' + str(fid) + '.jpg'
+        fid = fid + 1
+        path = folder + str(fid) + '.jpg'
         pathlist.append((path,(c[1],c[3],c[2],c[4]))) # (min_x, max_x, min_y, max_y) no padding
         cv2.imwrite(path, roi)  
         

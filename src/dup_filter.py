@@ -28,8 +28,8 @@ def filter_duplicates():
         if len(x) == 1:
             continue
         image_array = sorted([(image_size(Image.open(f, 'r')), f) for f in x], key=lambda x: x[0], reverse=True)[1:]
-        for x in image_array:
-            os.remove(x[1]) 
+        for img in image_array:
+            os.remove(img[1]) 
 
 
 

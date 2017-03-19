@@ -4,3 +4,4 @@ venv
 uploads/*
 src/output.txt
 .env
+tmp/*

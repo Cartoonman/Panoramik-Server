@@ -53,6 +53,9 @@ def initialize_progress(j):
     j.save()
            
 def update_progress(state=None, cs=0):    
+    if job is None:
+        print "Warning, non-job object detected, if this is running on Worker instance, investigate immediately"
+        return
     job.meta['progress'] = job.meta['progress'] + 10 if cs == 0 else job.meta['progress'] + cs
     if state is not None:
         job.meta['state'] = state
