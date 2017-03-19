@@ -23,7 +23,7 @@ def s3_upload(filename):
         
         
 def run_analysis(filename):
-    return q.enqueue(proc.run_process, filename, UPLOAD_FOLDER, BASE_DIR)        
+    return q.enqueue(proc.run_process, filename)        
 
 @app.route("/")
 def home():

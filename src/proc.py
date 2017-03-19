@@ -49,12 +49,11 @@ def generate_subimages(hulls, img, h, v):
     return pathlist 
     
 
-def get_image(filename, UPLOAD_FOLDER):
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
+def get_image(filename):
     s3 = boto3.client('s3')
     update_progress('Downloading Image')
-    s3.download_file(os.environ.get("S3_BUCKET"), filename, filepath)
-    return cv2.imread(filepath)
+    s3.download_file(os.environ.get("S3_BUCKET"), filename, 'uploads/' + filename)
+    return cv2.imread('uploads/' + filename)
 
 def clear_cache():
     update_progress('Clearing Cache')
@@ -75,10 +74,9 @@ def mser_detect(img, x_len, y_len):
     
     
 
-def run_process(filename, UPLOAD_FOLDER, BASE_DIR):
-    print os.getpid()
+def run_process(filename):
     initialize_progress()  
-    img = get_image(filename, UPLOAD_FOLDER)
+    img = get_image(filename)
     
     clear_cache()
 
@@ -114,8 +112,7 @@ def run_process(filename, UPLOAD_FOLDER, BASE_DIR):
     #cv2.waitKey(0)  
 
     #cv2.rectangle(c_vis,(x,y),(x+w,y+h),(255,0,0),2)
-    print BASE_DIR
-    cv2.imwrite(BASE_DIR + '/uploads/result.jpg', img)
+    cv2.imwrite('uploads/result.jpg', img)
     set_finished()
     return results
     #return {}
