@@ -15,11 +15,14 @@ takePicture()
 
 # example of grabbing device info and using it in your python program.
 ptpinfo = subprocess.Popen(["ptpcam", "--info"], stdout=subprocess.PIPE)
+time.sleep(5)
 
 # although this simply prints to stdout, you can parse
 # the response for your program
 for line in ptpinfo.stdout.readlines():
     print(line.rstrip())
+
+
 
 # find the last picture taken. Modify to parse for date or other
 files = []
