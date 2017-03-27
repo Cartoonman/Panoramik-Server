@@ -22,7 +22,6 @@ Returns list of hull data as well as edge coordinates for bounding rectangle cal
 """  
 def generate_subimages(hulls, img, h, v, folder = '/tmp/'):
     utils.update_progress('Extracting Regions')
-    padding = 1.15
     fid = 0 
     pathlist = []
     
@@ -31,25 +30,31 @@ def generate_subimages(hulls, img, h, v, folder = '/tmp/'):
         cv2.imwrite('/tmp/image.jpg', img)  
         pathlist.append(('/tmp/image.jpg', (0,h,0,v)))
         return pathlist
-    for c in coords:
-        #if c_vis is not None:
-        #    cv2.rectangle(c_vis,(max(c[1],0),max(c[2],0)),(max(c[1],0)+(c[3]-c[1]), max(c[2],0)+(c[4]-c[2])),(255,0,0),2)
+    for rect, c in process_coords(coords,h,v):
+        x,y,wi,hi = rect
+        roi=img[y:hi,x:wi]
+        fid = fid + 1
+        path = folder + str(fid) + '.jpg'
+        pathlist.append((path,(c[0],c[2],c[1],c[3]))) # (min_x, max_x, min_y, max_y) no padding
+        cv2.imwrite(path, roi)  
         
+    return pathlist 
+    
+def process_coords(coords,h,v):
+    padding = 1.15
+    validlist = []
+    for c in coords:
         minx = c[1] - (int(c[1]*padding) - c[1])
         maxx = int(c[3]*padding)
         miny = c[2] - (int(c[2]*padding) - c[2])
         maxy = int(c[4]*padding)
         
         if  (c[3]-c[1] > int(h *.45)) or (c[4]-c[2] > int(v *.45)) or (min(maxy-miny,maxx-minx)/max(maxy-miny,maxx-minx) < 0.30):
-            continue
+            continue    
+        validlist.append([[max(minx,0),max(miny, 0),max(minx,0)+(maxx-minx),max(miny, 0)+(maxy-miny)],[c[1],c[2],c[3],c[4]]])
         
-        roi=img[max(miny, 0):max(miny, 0)+(maxy-miny),max(minx,0):max(minx,0)+(maxx-minx)]
-        fid = fid + 1
-        path = folder + str(fid) + '.jpg'
-        pathlist.append((path,(c[1],c[3],c[2],c[4]))) # (min_x, max_x, min_y, max_y) no padding
-        cv2.imwrite(path, roi)  
-        
-    return pathlist 
+    return validlist
+    
     
 
 def get_image(filename):
