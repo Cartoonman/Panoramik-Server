@@ -1,0 +1,13 @@
+{
+    "google" : "AIzaSyBl670JW4dni18NSYDE9uilOMCAn-IYzCE",
+    "microsoft" : "e49d7545bfe84b619ce3d0e3f2a9046e",
+    "clarifai" : {
+        "client_id" : "vU-oq3ungwm_Xm1Mv9Ry4V9MhiHmxmGgGJknnPzi", 
+        "client_secret" : "R0WBXbnVgvKTSHxA4qGOKUl6GFoHQ40H5Nj-tHCy"
+    },
+    "ibm" : "5fdfb59997bcc7fba0ce643412fb7dbddf35cb13",
+    "cloudsight" : {
+        "api_key" : "2y0IHqz4sChtsL0yOc_SuQ",
+        "api_secret" : "YFfm9lB_VyL11kR-xe2RRw"
+    }
+}

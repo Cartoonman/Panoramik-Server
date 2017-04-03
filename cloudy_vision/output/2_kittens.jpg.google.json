@@ -1,0 +1,64 @@
+{
+  "responses": [
+    {
+      "labelAnnotations": [
+        {
+          "mid": "/m/01yrx",
+          "description": "cat",
+          "score": 0.9864841
+        },
+        {
+          "mid": "/m/04rky",
+          "description": "mammal",
+          "score": 0.94193614
+        },
+        {
+          "mid": "/m/09686",
+          "description": "vertebrate",
+          "score": 0.9291988
+        },
+        {
+          "mid": "/m/035qhg",
+          "description": "fauna",
+          "score": 0.8455444
+        },
+        {
+          "mid": "/m/0hjzp",
+          "description": "kitten",
+          "score": 0.8433595
+        },
+        {
+          "mid": "/m/07k6w8",
+          "description": "small to medium sized cats",
+          "score": 0.80997556
+        },
+        {
+          "mid": "/m/01l7qd",
+          "description": "whiskers",
+          "score": 0.80966246
+        },
+        {
+          "mid": "/m/0307l",
+          "description": "cat like mammal",
+          "score": 0.79739684
+        },
+        {
+          "mid": "/m/01nq_x",
+          "description": "wild cat",
+          "score": 0.7601772
+        },
+        {
+          "mid": "/m/03ttd9",
+          "description": "pixie bob",
+          "score": 0.7357877
+        }
+      ],
+      "safeSearchAnnotation": {
+        "adult": "VERY_UNLIKELY",
+        "spoof": "UNLIKELY",
+        "medical": "VERY_UNLIKELY",
+        "violence": "VERY_UNLIKELY"
+      }
+    }
+  ]
+}
