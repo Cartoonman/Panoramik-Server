@@ -101,7 +101,7 @@ def get_results():
         fail_check()
         time.sleep(3.1)
         q.put(filename)
-        break ## REMOVE FOR FULL PROCESSING. RIGHT NOW ONLY 1 IMAGE WILL BE SENT.
+        #break ## REMOVE FOR FULL PROCESSING. RIGHT NOW ONLY 1 IMAGE WILL BE SENT.
     FLAG = True  
     while True:
         if q.empty() == False:

@@ -5,3 +5,4 @@ uploads/*
 src/output.txt
 .env
 tmp/*
+cloudy_vision/*
