@@ -1,0 +1,15 @@
+lsusb: verify computer finds camera as USB device
+ptpcam -i: verify ptpcam can connect to camera
+ptpcam -o: list operations that libptp can do
+ptpcam -p: access camera properties
+
+ptpcam --show-property=0x5001: battery charge status %
+ptpcam --show-property=0x5013: check capture mode
+ptpcam --set-property=0x5013 --val=0x8002: to change still capture mode to video shooting
+
+ptpcam --show-property=0xd803: sleepDelay (600 = 10 minutes)
+ptpcam --set-property=0xd803 --val=600
+
+ptpcam -c: take picture
+ptpcam -L: list files on camera
+ptpcam --get-file=0x0064026e: download file(handler) from camera to computer

@@ -1,0 +1,64 @@
+{
+  "responses": [
+    {
+      "labelAnnotations": [
+        {
+          "mid": "/m/015p6",
+          "description": "bird",
+          "score": 0.9886612
+        },
+        {
+          "mid": "/m/09686",
+          "description": "vertebrate",
+          "score": 0.92918825
+        },
+        {
+          "mid": "/m/01c4rd",
+          "description": "beak",
+          "score": 0.92904145
+        },
+        {
+          "mid": "/m/035qhg",
+          "description": "fauna",
+          "score": 0.8455444
+        },
+        {
+          "mid": "/m/01dq4q",
+          "description": "coraciiformes",
+          "score": 0.5844223
+        },
+        {
+          "mid": "/m/0cjvf",
+          "description": "perching bird",
+          "score": 0.57876813
+        },
+        {
+          "mid": "/m/01gl3t",
+          "description": "roller",
+          "score": 0.5551664
+        },
+        {
+          "mid": "/m/0b5gs",
+          "description": "branch",
+          "score": 0.5280356
+        },
+        {
+          "mid": "/m/083s2",
+          "description": "wing",
+          "score": 0.5273855
+        },
+        {
+          "mid": "/m/0h02z",
+          "description": "bee eater",
+          "score": 0.52390796
+        }
+      ],
+      "safeSearchAnnotation": {
+        "adult": "VERY_UNLIKELY",
+        "spoof": "UNLIKELY",
+        "medical": "VERY_UNLIKELY",
+        "violence": "VERY_UNLIKELY"
+      }
+    }
+  ]
+}

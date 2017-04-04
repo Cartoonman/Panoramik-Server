@@ -1,0 +1,1803 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cloudy Vision is an open source tool to test the image labeling capabilities of different computer vision API vendors.">
+  <title>Cloudy Vision</title>
+  <link rel="stylesheet" href="../static/normalize.css">
+  <link rel="stylesheet" href="../static/skeleton.css">
+  <link rel="stylesheet" href="../static/site.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="row">
+      <div class="twelve columns">
+
+        <h2>Cloudy Vision Output</h2>
+
+        
+        
+        
+
+        <h4>Summary</h4>
+        <p>
+            5 images were processed across 4 vendors: msft, ibm, google, cloudsight.
+        </p>
+
+        <h4>How to Read the Output Below</h4>
+        <p>
+          <ol>
+            <li>For each image, we display a scaled down version of the image, its name, and results from all vendors.</li>
+            <li>The focus is on tagging, so only tags and captions along with confidence scores are displayed.</li>
+            <li>Raw output from each vendor is available by clicking to view the raw JSON.</li>
+            <li>Images are scaled down for readability. To see the original that was sent to vendor APIs, click on the image.</li>
+          </ol>
+        </p>
+
+      </div>
+    </div>
+
+    <hr>
+
+    
+    <div class="row">
+
+      <div class="three columns image">
+        <h2 class="image_name">japan_people.jpg</h2>
+        <a href="../input_images/japan_people.jpg">
+          <img class="u-max-full-width" src='japan_people.jpg'>
+        </a>
+      </div>
+
+      <div class="eight columns result">
+
+        <table class="u-full-width">
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              msft
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" japan_people.jpg.msft.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.647129359411">
+                a group of people preparing food in a kitchen
+                
+                  <span class="score">(.65)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.99990439415">
+                person
+                
+                  <span class="score">(1.00)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.998083233833">
+                food
+                
+                  <span class="score">(1.00)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.967927634716">
+                indoor
+                
+                  <span class="score">(.97)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.878179192543">
+                kitchen
+                
+                  <span class="score">(.88)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.762110054493">
+                preparing
+                
+                  <span class="score">(.76)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.657917261124">
+                people
+                
+                  <span class="score">(.66)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.450391769409">
+                cooking
+                
+                  <span class="score">(.45)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.281526982784">
+                meal
+                
+                  <span class="score">(.28)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.217079713941">
+                meat
+                
+                  <span class="score">(.22)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              ibm
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" japan_people.jpg.ibm.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              ibm_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.624">
+                baker
+                
+                  <span class="score">(.62)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.82">
+                person
+                
+                  <span class="score">(.82)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.546">
+                enjoying food
+                
+                  <span class="score">(.55)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.545">
+                taster
+                
+                  <span class="score">(.55)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.545">
+                people
+                
+                  <span class="score">(.55)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.532">
+                waiter
+                
+                  <span class="score">(.53)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.53">
+                waitress
+                
+                  <span class="score">(.53)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.877">
+                pale yellow color
+                
+                  <span class="score">(.88)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.652">
+                alizarine red color
+                
+                  <span class="score">(.65)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              google
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" japan_people.jpg.google.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              google_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.9535636">
+                human action
+                
+                  <span class="score">(.95)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.92083466">
+                person
+                
+                  <span class="score">(.92)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.7882108">
+                cooking
+                
+                  <span class="score">(.79)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.769569">
+                lunch
+                
+                  <span class="score">(.77)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.7650681">
+                meal
+                
+                  <span class="score">(.77)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.7278671">
+                cook
+                
+                  <span class="score">(.73)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.64021415">
+                eating
+                
+                  <span class="score">(.64)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.579274">
+                sense
+                
+                  <span class="score">(.58)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.5540652">
+                food
+                
+                  <span class="score">(.55)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              cloudsight
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" japan_people.jpg.cloudsight.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              cloudsight_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: None">
+                three women's pink aprons
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+        </table>
+
+      </div>
+
+    </div>
+
+    <hr>
+    
+    <div class="row">
+
+      <div class="three columns image">
+        <h2 class="image_name">items_table.jpg</h2>
+        <a href="../input_images/items_table.jpg">
+          <img class="u-max-full-width" src='items_table.jpg'>
+        </a>
+      </div>
+
+      <div class="eight columns result">
+
+        <table class="u-full-width">
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              msft
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" items_table.jpg.msft.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.678067405037">
+                a laptop sitting on a counter
+                
+                  <span class="score">(.68)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.991961061954">
+                indoor
+                
+                  <span class="score">(.99)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              ibm
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" items_table.jpg.ibm.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              ibm_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.745">
+                office furniture
+                
+                  <span class="score">(.74)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.747">
+                furniture
+                
+                  <span class="score">(.75)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.595">
+                printer
+                
+                  <span class="score">(.59)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.6">
+                machine
+                
+                  <span class="score">(.60)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.697">
+                device
+                
+                  <span class="score">(.70)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.53">
+                digital scanner
+                
+                  <span class="score">(.53)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.536">
+                electronic device
+                
+                  <span class="score">(.54)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.957">
+                charcoal color
+                
+                  <span class="score">(.96)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              google
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" items_table.jpg.google.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              google_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.90377575">
+                furniture
+                
+                  <span class="score">(.90)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.81389093">
+                room
+                
+                  <span class="score">(.81)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.8017151">
+                table
+                
+                  <span class="score">(.80)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.7573907">
+                desk
+                
+                  <span class="score">(.76)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.7268364">
+                automotive exterior
+                
+                  <span class="score">(.73)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.5340783">
+                office
+                
+                  <span class="score">(.53)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              cloudsight
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" items_table.jpg.cloudsight.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              cloudsight_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: None">
+                white controller, two laptop computer and flat screen tv
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+        </table>
+
+      </div>
+
+    </div>
+
+    <hr>
+    
+    <div class="row">
+
+      <div class="three columns image">
+        <h2 class="image_name">2_kittens.jpg</h2>
+        <a href="../input_images/2_kittens.jpg">
+          <img class="u-max-full-width" src='2_kittens.jpg'>
+        </a>
+      </div>
+
+      <div class="eight columns result">
+
+        <table class="u-full-width">
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              msft
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" 2_kittens.jpg.msft.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.91698473113">
+                a cat sitting in a field
+                
+                  <span class="score">(.92)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.999998569489">
+                grass
+                
+                  <span class="score">(1.00)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.990158975124">
+                cat
+                
+                  <span class="score">(.99)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.98909419775">
+                outdoor
+                
+                  <span class="score">(.99)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.937337815762">
+                animal
+                
+                  <span class="score">(.94)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.905879080296">
+                field
+                
+                  <span class="score">(.91)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.900981664658">
+                mammal
+                
+                  <span class="score">(.90)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.659144699574">
+                green
+                
+                  <span class="score">(.66)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.641471028328">
+                domestic cat
+                
+                  <span class="score">(.64)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              ibm
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" 2_kittens.jpg.ibm.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              ibm_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.647">
+                European wildcat
+                
+                  <span class="score">(.65)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.788">
+                wildcat
+                
+                  <span class="score">(.79)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.921">
+                cat
+                
+                  <span class="score">(.92)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.926">
+                feline
+                
+                  <span class="score">(.93)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.927">
+                carnivore
+                
+                  <span class="score">(.93)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.927">
+                mammal
+                
+                  <span class="score">(.93)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.929">
+                animal
+                
+                  <span class="score">(.93)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.552">
+                tabby cat
+                
+                  <span class="score">(.55)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.8">
+                domestic cat
+                
+                  <span class="score">(.80)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.536">
+                Egyptian cat
+                
+                  <span class="score">(.54)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.53">
+                tiger cat
+                
+                  <span class="score">(.53)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.942">
+                ash grey color
+                
+                  <span class="score">(.94)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              google
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" 2_kittens.jpg.google.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              google_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.9864841">
+                cat
+                
+                  <span class="score">(.99)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.94193614">
+                mammal
+                
+                  <span class="score">(.94)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.9291988">
+                vertebrate
+                
+                  <span class="score">(.93)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.8455444">
+                fauna
+                
+                  <span class="score">(.85)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.8433595">
+                kitten
+                
+                  <span class="score">(.84)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.80997556">
+                small to medium sized cats
+                
+                  <span class="score">(.81)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.80966246">
+                whiskers
+                
+                  <span class="score">(.81)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.79739684">
+                cat like mammal
+                
+                  <span class="score">(.80)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.7601772">
+                wild cat
+                
+                  <span class="score">(.76)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.7357877">
+                pixie bob
+                
+                  <span class="score">(.74)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              cloudsight
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" 2_kittens.jpg.cloudsight.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              cloudsight_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: None">
+                brown and
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+        </table>
+
+      </div>
+
+    </div>
+
+    <hr>
+    
+    <div class="row">
+
+      <div class="three columns image">
+        <h2 class="image_name">pano.jpg</h2>
+        <a href="../input_images/pano.jpg">
+          <img class="u-max-full-width" src='pano.jpg'>
+        </a>
+      </div>
+
+      <div class="eight columns result">
+
+        <table class="u-full-width">
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              msft
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" pano.jpg.msft.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.830712685115">
+                a room with a desk and a chair
+                
+                  <span class="score">(.83)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.999880194664">
+                floor
+                
+                  <span class="score">(1.00)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.99874830246">
+                indoor
+                
+                  <span class="score">(1.00)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.991838395596">
+                wall
+                
+                  <span class="score">(.99)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.949452877045">
+                room
+                
+                  <span class="score">(.95)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.811416745186">
+                window
+                
+                  <span class="score">(.81)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.79776263237">
+                desk
+                
+                  <span class="score">(.80)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.410135030746">
+                furniture
+                
+                  <span class="score">(.41)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.319689691067">
+                area
+                
+                  <span class="score">(.32)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              ibm
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" pano.jpg.ibm.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              ibm_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: None">
+                error-file-bigger-than-2mb
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              google
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" pano.jpg.google.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              google_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: None">
+                none found
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              cloudsight
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" pano.jpg.cloudsight.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              cloudsight_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: None">
+                white wooden table
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+        </table>
+
+      </div>
+
+    </div>
+
+    <hr>
+    
+    <div class="row">
+
+      <div class="three columns image">
+        <h2 class="image_name">2_birds.png</h2>
+        <a href="../input_images/2_birds.png">
+          <img class="u-max-full-width" src='2_birds.png'>
+        </a>
+      </div>
+
+      <div class="eight columns result">
+
+        <table class="u-full-width">
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              msft
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" 2_birds.png.msft.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.863191798894">
+                a colorful bird sitting on a branch
+                
+                  <span class="score">(.86)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              msft_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.997617661953">
+                sitting
+                
+                  <span class="score">(1.00)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.990749895573">
+                animal
+                
+                  <span class="score">(.99)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.900676012039">
+                bird
+                
+                  <span class="score">(.90)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.899970889091">
+                colorful
+                
+                  <span class="score">(.90)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.884853005409">
+                outdoor
+                
+                  <span class="score">(.88)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.645065486431">
+                green
+                
+                  <span class="score">(.65)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.629112839699">
+                branch
+                
+                  <span class="score">(.63)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.618677198887">
+                bee eater
+                
+                  <span class="score">(.62)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.614722490311">
+                wooden
+                
+                  <span class="score">(.61)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.317991793156">
+                colored
+                
+                  <span class="score">(.32)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              ibm
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" 2_birds.png.ibm.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              ibm_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.996">
+                bee eater
+                
+                  <span class="score">(1.00)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.996">
+                bird
+                
+                  <span class="score">(1.00)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.996">
+                animal
+                
+                  <span class="score">(1.00)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.954">
+                greenish blue color
+                
+                  <span class="score">(.95)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.875">
+                green color
+                
+                  <span class="score">(.88)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              google
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" 2_birds.png.google.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              google_tags
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: 0.9886612">
+                bird
+                
+                  <span class="score">(.99)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.92918825">
+                vertebrate
+                
+                  <span class="score">(.93)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.92904145">
+                beak
+                
+                  <span class="score">(.93)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.8455444">
+                fauna
+                
+                  <span class="score">(.85)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.5844223">
+                coraciiformes
+                
+                  <span class="score">(.58)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.57876813">
+                perching bird
+                
+                  <span class="score">(.58)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.5551664">
+                roller
+                
+                  <span class="score">(.56)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.5280356">
+                branch
+                
+                  <span class="score">(.53)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.5273855">
+                wing
+                
+                  <span class="score">(.53)</span>
+                
+                
+                  ,
+                
+                </span>  
+              
+                
+                <span class="result" style="opacity: 0.52390796">
+                bee eater
+                
+                  <span class="score">(.52)</span>
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+          <tr class="raw_json">
+            <td class="result_name">
+              cloudsight
+            </td>
+            <td class="result_values">
+              <a class="view_json" href=" 2_birds.png.cloudsight.json">View raw json</a>
+            </td>
+          </tr>
+              
+          <tr>
+            <td class="result_name">
+              cloudsight_captions
+            </td>
+            <td class="result_values">
+              
+                
+                <span class="result" style="opacity: None">
+                two green-and-brown birds
+                
+                
+                </span>  
+              
+            </td>
+          </tr>
+          
+        
+        </table>
+
+      </div>
+
+    </div>
+
+    <hr>
+    
+
+  </div>
+</body>
+
+</html>
