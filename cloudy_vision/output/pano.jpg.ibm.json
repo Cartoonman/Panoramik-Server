@@ -1,0 +1,1 @@
+{"images": [{"image": "input_images/pano.jpg", "error": {"error_id": "input_error", "description": "Image size limit exceeded (3235124 bytes > 2097152 bytes [2 MiB])."}}], "custom_classes": 0, "images_processed": 1}
