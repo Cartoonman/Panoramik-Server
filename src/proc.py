@@ -7,7 +7,6 @@ from glob import glob
 import boto3
 import utils
 from cloudsight_handler import get_results
-from dup_filter import filter_duplicates
 
 # Utility Functions
 """
@@ -30,29 +29,69 @@ def generate_subimages(hulls, img, h, v, folder = '/tmp/'):
         cv2.imwrite('/tmp/image.jpg', img)  
         pathlist.append(('/tmp/image.jpg', (0,h,0,v)))
         return pathlist
-    for rect, c in process_coords(coords,h,v):
+    for rect, c in process_coords(coords,h,v, img):       
         x,y,wi,hi = rect
+        #cv2.rectangle(img,(int(x),int(y)),(int(wi),int(hi)),(255,0,0),2)
         roi=img[y:hi,x:wi]
         fid = fid + 1
         path = folder + str(fid) + '.jpg'
-        pathlist.append((path,(c[0],c[2],c[1],c[3]))) # (min_x, max_x, min_y, max_y) no padding
+        pathlist.append((path,(x,y,wi,hi))) # (min_x, max_x, min_y, max_y) no padding
         cv2.imwrite(path, roi)  
         
     return pathlist 
     
-def process_coords(coords,h,v):
-    padding = 1.15
+def process_coords(coords,h,v, img):
+
+    padding = 1.65
     validlist = []
     for c in coords:
-        minx = c[1] - (int(c[1]*padding) - c[1])
-        maxx = int(c[3]*padding)
-        miny = c[2] - (int(c[2]*padding) - c[2])
-        maxy = int(c[4]*padding)
+        #minx = c[1] - (int(c[1]*padding) - c[1])
+        #maxx = minx + int((c[3]-c[1])*padding)
+        #miny = c[2] - (int(c[2]*padding) - c[2])
+        #maxy = miny + int((c[4]-c[2])*padding)
         
-        if  (c[3]-c[1] > int(h *.45)) or (c[4]-c[2] > int(v *.45)) or (min(maxy-miny,maxx-minx)/max(maxy-miny,maxx-minx) < 0.30):
-            continue    
-        validlist.append([[max(minx,0),max(miny, 0),max(minx,0)+(maxx-minx),max(miny, 0)+(maxy-miny)],[c[1],c[2],c[3],c[4]]])
+        if  (c[3]-c[1] > int(h *.45)) or (c[4]-c[2] > int(v *.45)) or (min(c[4]-c[2],c[3]-c[1])/max(c[4]-c[2],c[3]-c[1]) < 0.25):
+            continue  
+        validlist.append([int(c[1]),int(c[2]),int(c[3]-c[1]),int(c[4]-c[2])])
+
+    validlist = validlist + validlist
+    grplst, _ = cv2.groupRectangles(validlist, 1)
+    #grplst = validlist
+    validlist = []
+    for c in grplst:
+        x1 = int(c[0])
+        y1 = int(c[1])
+        x2 = int(c[2]+c[0])
+        y2 = int(c[3]+c[1])
         
+        
+        width = x2-x1
+        height = y2-y1
+        
+        new_width = width*padding
+        new_height = height*padding
+        
+        w_delta = new_width - width
+        h_delta = new_height - height
+        delta = max(w_delta//2, h_delta//2)
+        minx = int(max(x1 - delta, 0))
+        maxx = int(min(x2 + delta, h))
+        miny = int(max(y1 - delta, 0))
+        maxy = int(min(y2 + delta, v))
+    
+    
+        """minx = c[0] - (int(c[0]*padding) - c[0])
+        maxx = minx + int((c[2])*padding)
+        miny = c[1] - (int(c[1]*padding) - c[1])
+        maxy = miny + int((c[3])*padding)
+            
+        width = min(maxx,h)
+        height = min(maxy,v)
+        x_c = max(minx,0)
+        y_c = max(miny,0)"""
+
+        validlist.append([[minx, miny, maxx, maxy],[c[0],c[1],c[2]+c[0],c[3]+c[1]]]) #[(x1,x1, w,h)],[(P1),(P2)]
+    
     return validlist
     
     
@@ -101,8 +140,6 @@ def run_process(filename):
  
     pathlist = generate_subimages(hulls, img, x_len, y_len) 
       
-    # Duplicate Removal
-    filter_duplicates()
     
     # Cloudsight Results
     results = get_results()
@@ -111,14 +148,14 @@ def run_process(filename):
     # Printing results for show
     cv2.polylines(img, hulls, 1, (0, 255, 0))
     #cv2.polylines(c_vis, map(lambda x: x[1], top_regions), 1, (0, 0, 255))
-    font = cv2.FONT_HERSHEY_SIMPLEX
+    font = cv2.FONT_HERSHEY_SIMPLEX #UNCOMMENT THIS WHEN READY TO PUT TO SERVER
     for x in pathlist:
         if x[0] in results:
             rc = x[1]
-            cv2.rectangle(img,(max(rc[0],0),max(rc[2],0)),(max(rc[0],0)+(rc[1]-rc[0]), max(rc[2],0)+(rc[3]-rc[2])),(255,0,0),2)
-            cv2.putText(img,results[x[0]][0] + ' : ' + results[x[0]][1],(rc[0],rc[2]+15), font,0.7,(255,255,255),1,cv2.CV_AA)
+            cv2.rectangle(img,(int(rc[0]),int(rc[1])),(int(rc[2]),int(rc[3])),(255,0,0),2)
+            cv2.putText(img,results[x[0]][0] + ' : ' + results[x[0]][1],(int(rc[0]),int(rc[1])+15), font, 0.7,(255,255,255),1,cv2.CV_AA)
 
-
+    
     #cv2.imshow('img',c_vis)
     #cv2.waitKey(0)  
 
