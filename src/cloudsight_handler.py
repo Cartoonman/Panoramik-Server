@@ -74,7 +74,6 @@ def monitor(files):
             update_progress(None,1)   
             a = a + 1 
         if a == 40:
-            q.task_done()
             return
 
 
