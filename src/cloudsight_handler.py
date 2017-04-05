@@ -12,6 +12,7 @@ from utils import update_progress, set_failed, is_failed
 concurrent = 5
 FLAG = False
 BREAK = False
+JOB_DONE = False
 CLOUDSIGHT_API_KEY = os.environ.get("CLOUDSIGHT_API_KEY")
 CLOUDSIGHT_API_SECRET = os.environ.get("CLOUDSIGHT_API_SECRET")
 
@@ -73,7 +74,7 @@ def monitor(files):
         while a < incr:
             update_progress(None,1)   
             a = a + 1 
-        if a == 40:
+        if a == 40 or BREAK or JOB_DONE:
             return
 
 
@@ -109,4 +110,5 @@ def get_results():
         else:
             break
     q.join()
+    JOB_DONE = True
     return result
