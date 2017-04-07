@@ -1,0 +1,14 @@
+<!doctype HTML>
+<html>
+    <head>
+        <title>Status</title>
+        {% if running %}
+        <meta http-equiv="refresh" content="1" >
+        {% endif %}
+        
+    </head>
+    <body>
+        <p>JSON Response</p>
+        <pre>{{ resp|safe }}</pre>
+    </body>
+</html>

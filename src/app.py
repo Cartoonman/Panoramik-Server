@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, flash, redirect, url_for, jsonify
+from flask import Flask, request, flash, redirect, url_for, jsonify, render_template
 from werkzeug.utils import secure_filename
 import proc 
 from rq import Queue
@@ -29,7 +29,7 @@ def run_analysis(filename, DEBUG=False):
 
 @app.route("/")
 def home():
-    return "PANORAMIK API ENDPOINT"
+    return render_template('home.html')
 
 
 @app.route("/upload", methods=['GET', 'POST'])
@@ -51,32 +51,36 @@ def upload(): #DEBUG ONLY
             file.save(os.path.join(UPLOAD_FOLDER, filename))
                 
             s3_upload(filename)
-                         
-            job = run_analysis(filename, True)
-            return redirect(url_for('.get_status', job_id=job.id))
-            #jsonify({"job_id":job.id})
+            if not request.form.getlist('cbox'):
+                job = run_analysis(filename, True)
+            else:
+                job = run_analysis(filename, False)
+            return redirect(url_for('.get_status', job_id=job.id, web="True"))
 
     else:
-        return '''
-        <!doctype HTML>
-        <html>
-        <head>
-        <title>Upload new File</title>
-        </head>
-        <body>
-        <h1>Upload new File</h1>
-        <form method=post enctype=multipart/form-data>
-          <p><input type=file name=file>
-             <input type=submit value=Upload>
-        </form>
-        </body>
-        </html>
-        '''
+        return render_template('upload.html')
     
 @app.route("/status", methods=['GET'])
 def get_status():
     job_id = request.args.get("job_id")  
-    if job_id:      
+    web = request.args.get("web")  
+    
+    status = status_handler(job_id)
+
+    if web:
+        if 'DONE' in str(status.response[0]) or 'FAIL' in str(status.response[0]):
+            return render_template('status.html', resp = str(status.response[0]), running=False)
+        else:
+            return render_template('status.html', resp = str(status.response[0]), running=True)
+    else:
+        return status
+     
+    
+    
+    
+            
+def status_handler(job_id):
+    if job_id:    
         job = q.fetch_job(job_id)    
         if job is not None:
             job.refresh()
@@ -93,7 +97,7 @@ def get_status():
             return jsonify({'status':"NOT_EXIST", 'message':"Job " + job_id + " not found!"})
     else:
         return jsonify({'status':"INVALID", 'message':"Invalid request. Must use job_id query."})
-            
+
 
 @app.route("/uploadImage", methods=['POST'])
 def uploadImage():
