@@ -10,14 +10,34 @@ from cloudsight_handler import get_results
 
 # Utility Functions
 """
-Returns list of hull data as well as edge coordinates for bounding rectangle calculation
+Returns list of the corners of our bounding box rectangles as follows:
+
+Panorama Image
+.---------------------------------h
+|(0, 0)                        (h, 0)
+|       (x1, y1)
+|           *--------
+|           |       |
+|           |       |
+|           --------*
+|               (x2, y2)
+v              
+(0, v)
+
 """
 def edge_coordinates(hulls):
-    return map(lambda c: (c, sorted(map(utils.mapx,c))[0], sorted(map(utils.mapy,c))[0], sorted(map(utils.mapx,c),reverse=True)[0], sorted(map(utils.mapy,c),reverse=True)[0]), hulls)
+    return map(
+        lambda c: (
+            int(sorted(map(utils.mapx,c))[0]), #x1
+            int(sorted(map(utils.mapy,c))[0]), #y1
+            int(sorted(map(utils.mapx,c),reverse=True)[0]), #x2
+            int(sorted(map(utils.mapy,c),reverse=True)[0])  #y2
+        ), hulls)
     
     
 """
-Returns list of hull data as well as edge coordinates for bounding rectangle calculation
+Generates subimages from source images and bounding boxes of our 
+detected regions.
 """  
 def generate_subimages(hulls, img, h, v, folder = '/tmp/'):
     utils.update_progress('Extracting Regions')
@@ -27,60 +47,37 @@ def generate_subimages(hulls, img, h, v, folder = '/tmp/'):
     coords = edge_coordinates(hulls)
     if len(coords) == 0:
         cv2.imwrite('/tmp/image.jpg', img)  
-        pathlist.append(('/tmp/image.jpg', (0,h,0,v)))
+        pathlist.append(('/tmp/image.jpg', (0, h, 0, v)))
         return pathlist
-    for rect, c in process_coords(coords,h,v, img):       
-        x1,y1,x2,y2 = rect
-        #cv2.rectangle(img,(int(x),int(y)),(int(wi),int(hi)),(255,0,0),2)
-        roi=img[y1:y2,x1:x2]
-        fid = fid + 1
-        path = folder + str(fid) + '.jpg'
-        pathlist.append((path,(c[0],c[1],c[2],c[3]))) # (min_x, max_x, min_y, max_y) no padding
-        cv2.imwrite(path, roi)  
+    else:
+        # p_c = padded coordinates. c = coordinates.
+        for p_c, c in process_coords(coords, h, v):    
+            p_x1, p_y1, p_x2, p_y2 = p_c
+            roi=img[p_y1:p_y2, p_x1:p_x2]
+            fid = fid + 1
+            path = folder + str(fid) + '.jpg'
+            pathlist.append((path, c))
+            cv2.imwrite(path, roi)  
         
     return pathlist 
     
 """
 Processing coordinates to filter out regions which should not be included, as well as
 clustering regions using groupRectangles
+h = horizontal length of the panorama image
+v = vertical length of the panorama image
 """    
-def process_coords(coords, h, v, img):
-
-    padding = 1.65
-    validlist = []
-    for c in coords:
-        if  (c[3]-c[1] > int(h *.45)) or (c[4]-c[2] > int(v *.45)) or (min(c[4]-c[2],c[3]-c[1])/max(c[4]-c[2],c[3]-c[1]) < 0.25):
-            continue  
-        validlist.append([int(c[1]),int(c[2]),int(c[3]-c[1]),int(c[4]-c[2])])
-
-    validlist = validlist + validlist
-    grplst, _ = cv2.groupRectangles(validlist, 1)
-    validlist = []
-    for c in grplst:
-        x1 = int(c[0])
-        y1 = int(c[1])
-        x2 = int(c[2]+c[0])
-        y2 = int(c[3]+c[1])
-             
-        width = x2-x1
-        height = y2-y1
-        
-        new_width = width*padding
-        new_height = height*padding
-        
-        w_delta = new_width - width
-        h_delta = new_height - height
-        delta = max(w_delta//2, h_delta//2)
-        minx = int(max(x1 - delta, 0))
-        maxx = int(min(x2 + delta, h))
-        miny = int(max(y1 - delta, 0))
-        maxy = int(min(y2 + delta, v))
+def process_coords(coords, h, v):
+    # Padding coefficient (x * p = padded_x). 1 <= p < = 2.
+    # e.g. p = 1.65 = 65% increase
+    p = 1.65
     
-
-        validlist.append([[minx, miny, maxx, maxy],
-            [x1, y1, x2, y2]]) #[(x1,y1, w, h)],[(P1),(P2)]
-    
-    return validlist
+    grouplist = filter(lambda x: utils.region_filter(x, h, v), coords)
+    # We duplicate each entry in grouplist so groupRectangles will work properly
+    grouplist = grouplist + grouplist    
+    grouplist, _ = cv2.groupRectangles(grouplist, 1)   
+    rectlist = map(lambda x: (utils.pad_box(x, h, v, p), tuple(x)), grouplist)      
+    return rectlist
     
     
 """
@@ -146,7 +143,7 @@ def mser_detect(img, x_len, y_len):
     min_t = int(math.floor((y_len*x_len)*0.0009))
     max_t = int(math.floor((y_len*x_len)*0.05))
     
-    #c_mser = cv2.MSER(5, 60, 14400, 0.25, 0.2, 200, 1.01, 0.003, 5)  #<- Default Values
+    #MSER(5, 60, 14400, 0.25, 0.2, 200, 1.01, 0.003, 5)  <- Default Values
     c_mser = cv2.MSER(5, min_t, max_t, 0.166, 0.153, 90, 1.001, 0.003, 5)
     c_regions = c_mser.detect(img, None)
     return [cv2.convexHull(p.reshape(-1, 1, 2)) for p in c_regions]
@@ -158,7 +155,7 @@ This is the MAIN PROCESS function which runs during worker operation. This is
 considered the PARENT thread. Takes in input filename to fetch from S3 server, and
 does all image processing and handling in this function.
 """
-def run_process(filename):
+def run_process(filename, DEBUG=False):
     # Fetch Image from S3
     img = get_image(filename)
     
@@ -175,27 +172,33 @@ def run_process(filename):
     #Generate the subimages from the regions and image
     pathlist = generate_subimages(hulls, img, x_len, y_len)      
     
+    
     # Cloudsight Results
-    results = get_results()  
+    if DEBUG == False:
+        results = get_results()  
  
     # Printing results for show
     cv2.polylines(img, hulls, 1, (0, 255, 0))
     
     # Places rectangles and text on regions onto the image.
     for x in pathlist:
-        if x[0] in results:
-            if results[x[0]][0] == 'completed':
-                rc = x[1]
-                cv2.rectangle(img,(rc[0],rc[1]),(rc[2],rc[3]),(255,0,0),2)
-                cv2.putText(img, results[x[0]][1], (rc[0],rc[1]+15), 
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.CV_AA)
-            else:
-                rc = x[1]
-                cv2.rectangle(img,(rc[0],rc[1]),(rc[2],rc[3]),(0,0,255),2)
-                cv2.putText(img, results[x[0]][1], (rc[0],rc[1]+15), 
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.CV_AA)
+        if not DEBUG:
+            if x[0] in results:
+                if results[x[0]][0] == 'completed':
+                    rc = x[1]
+                    cv2.rectangle(img,(rc[0],rc[1]),(rc[2],rc[3]),(255,0,0),2)
+                    cv2.putText(img, results[x[0]][1], (rc[0],rc[1]+15), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.CV_AA)
+                else:
+                    rc = x[1]
+                    cv2.rectangle(img,(rc[0],rc[1]),(rc[2],rc[3]),(0,0,255),2)
+                    cv2.putText(img, results[x[0]][1], (rc[0],rc[1]+15), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.CV_AA)
+        else:
+            rc = x[1]
+            cv2.rectangle(img,(rc[0],rc[1]),(rc[2],rc[3]),(255,0,0),2)
+         
 
-    #cv2.rectangle(c_vis,(x,y),(x+w,y+h),(255,0,0),2)
     cv2.imwrite('uploads/result.jpg', img)
     
     # Upload result processed image to S3
@@ -205,7 +208,8 @@ def run_process(filename):
     utils.set_finished()
     
     # Return the results.
-    return results
+    #return results
+    return
 
 
 

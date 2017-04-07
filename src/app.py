@@ -22,8 +22,8 @@ def s3_upload(filename):
     s3.upload_file(os.path.join(UPLOAD_FOLDER, filename), os.environ.get("S3_BUCKET"), filename)        
         
         
-def run_analysis(filename):
-    j = q.enqueue(proc.run_process, filename)   
+def run_analysis(filename, DEBUG=False):
+    j = q.enqueue(proc.run_process, filename, DEBUG)   
     utils.initialize_progress(j)     
     return j
 
@@ -52,7 +52,7 @@ def upload(): #DEBUG ONLY
                 
             s3_upload(filename)
                          
-            job = run_analysis(filename)
+            job = run_analysis(filename, True)
             return redirect(url_for('.get_status', job_id=job.id))
             #jsonify({"job_id":job.id})
 
