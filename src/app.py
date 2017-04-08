@@ -3,8 +3,9 @@ from flask import Flask, request, flash, redirect, url_for, jsonify, render_temp
 from werkzeug.utils import secure_filename
 import proc 
 from rq import Queue
+from rq.job import Job
 from boto3 import client
-import utils
+import web_utils
 import redis
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,9 +24,10 @@ def s3_upload(filename):
         
         
 def run_analysis(filename, DEBUG=False):
-    j = q.enqueue(proc.run_process, filename, DEBUG)   
-    utils.initialize_progress(j)     
-    return j
+    context = {'progress': 0, 'state': "Ready", 'url': ""}
+    job = Job.create(func = proc.run_process, args = [filename, DEBUG], connection = conn, meta = context)
+    q.enqueue_job(job)
+    return job
 
 @app.route("/")
 def home():
@@ -46,7 +48,7 @@ def upload(): #DEBUG ONLY
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file and utils.allowed_file(file.filename):
+        if file and web_utils.allowed_file(file.filename):
             filename = secure_filename(file.filename) # filename here serves as key for now
             file.save(os.path.join(UPLOAD_FOLDER, filename))
                 
@@ -86,7 +88,8 @@ def status_handler(job_id):
         job = q.fetch_job(job_id)    
         if job is not None:
             job.refresh()
-            status = job.status
+            print job.get_status()
+            status = job.get_status()
             if (status == 'started'):
                 return jsonify({'status':"RUNNING",'message':"Please wait, processing",'progress':job.meta['progress'], 'state':job.meta['state']})
             elif status == 'queued':

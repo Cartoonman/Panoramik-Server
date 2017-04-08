@@ -1,11 +1,7 @@
 from __future__ import division
 from rq import get_current_job
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 job = get_current_job()
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
                
 def image_size(f):    
     size = reduce(lambda x,y: x*y, f.size)        
@@ -53,15 +49,7 @@ def pad_box(c, h, v, p):
         p_y2 = min(y2 + delta, v)
         
         return (p_x1, p_y1, p_x2, p_y2)
-
-
-           
-def initialize_progress(j):
-    j.meta['progress'] = 0
-    j.meta['state'] = "Ready"
-    j.meta['url'] = "#"
-    j.save()
-           
+     
 def update_progress(state=None, cs=0):    
     if job is None:
         print "Warning, non-job object detected, if this is running on Worker instance, investigate immediately"
@@ -79,7 +67,6 @@ def set_url(url):
 def set_finished():
     job.set_status('finished') 
     job.save()      
-    job.refresh()
     
 def set_failed():
     job.set_status('failed') 

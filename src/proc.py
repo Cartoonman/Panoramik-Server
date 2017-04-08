@@ -75,7 +75,7 @@ def process_coords(coords, h, v):
     grouplist = filter(lambda x: utils.region_filter(x, h, v), coords)
     # We duplicate each entry in grouplist so groupRectangles will work properly
     grouplist = grouplist + grouplist    
-    grouplist, _ = cv2.groupRectangles(grouplist, 1)   
+    grouplist, _ = cv2.groupRectangles(grouplist, 1, 0.05)   
     rectlist = map(lambda x: (utils.pad_box(x, h, v, p), tuple(x)), grouplist)      
     return rectlist
     
@@ -97,7 +97,7 @@ def upload_result(filename):
     s3 = boto3.client('s3')
     s3.upload_file('uploads/result.jpg', os.environ.get("S3_BUCKET"), 'results/' + filename, {'ACL': 'public-read'}) 
     url = '{}/{}/{}'.format(s3.meta.endpoint_url, os.environ.get("S3_BUCKET"), 'results/' + filename)   
-    utils.set_url(url)
+    utils.set_url(url) 
 
 """
 Clearing the temporary cache used to hold our subimages (in this implementation, uses
@@ -209,10 +209,10 @@ def run_process(filename, DEBUG=False):
     
     # Set flag to Finished for job
     utils.set_finished()
-    
     # Return the results.
-    #return results
-    return
+    print utils.job
+    print utils.job.meta
+    return 
 
 
 

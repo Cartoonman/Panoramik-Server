@@ -11,7 +11,7 @@ requests==2.13.0
 Werkzeug==0.11.15
 cloudsight==0.9.2
 Pillow==4.0.0
-rq==0.7.1
+-e git+https://github.com/nvie/rq.git@5660f925ae99f4a13f0bb12414354836fa48dd25#egg=rq
 six==1.10.0
 redis==2.10.5
 
