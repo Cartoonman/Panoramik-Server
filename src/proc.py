@@ -95,7 +95,9 @@ work the server did in identifying regions
 """    
 def upload_result(filename):
     s3 = boto3.client('s3')
-    s3.upload_file('uploads/result.jpg', os.environ.get("S3_BUCKET"), 'results/' + filename)    
+    s3.upload_file('uploads/result.jpg', os.environ.get("S3_BUCKET"), 'results/' + filename, {'ACL': 'public-read'}) 
+    url = '{}/{}/{}'.format(s3.meta.endpoint_url, os.environ.get("S3_BUCKET"), 'results/' + filename)   
+    utils.set_url(url)
 
 """
 Clearing the temporary cache used to hold our subimages (in this implementation, uses
@@ -203,6 +205,7 @@ def run_process(filename, DEBUG=False):
     
     # Upload result processed image to S3
     upload_result(filename)
+    
     
     # Set flag to Finished for job
     utils.set_finished()

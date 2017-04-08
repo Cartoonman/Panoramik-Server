@@ -66,12 +66,14 @@ def get_status():
     web = request.args.get("web")  
     
     status = status_handler(job_id)
-
     if web:
-        if 'DONE' in str(status.response[0]) or 'FAIL' in str(status.response[0]):
+        if 'DONE' in str(status.response[0]):
+            return render_template('status.html', resp = str(status.response[0]), running=False, img_url = q.fetch_job(job_id).meta['url'])
+        elif 'FAIL' in str(status.response[0]):
             return render_template('status.html', resp = str(status.response[0]), running=False)
         else:
             return render_template('status.html', resp = str(status.response[0]), running=True)
+
     else:
         return status
      

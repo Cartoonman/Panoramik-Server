@@ -10,5 +10,8 @@
     <body>
         <p>JSON Response</p>
         <pre>{{ resp|safe }}</pre>
+        {% if not running %}
+        <img src="{{ img_url }}" width = 100% />
+        {% endif %}
     </body>
 </html>

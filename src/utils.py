@@ -59,6 +59,7 @@ def pad_box(c, h, v, p):
 def initialize_progress(j):
     j.meta['progress'] = 0
     j.meta['state'] = "Ready"
+    j.meta['url'] = "#"
     j.save()
            
 def update_progress(state=None, cs=0):    
@@ -69,11 +70,16 @@ def update_progress(state=None, cs=0):
     if state is not None:
         job.meta['state'] = state
     job.save()
-    
+
+
+def set_url(url):
+    job.meta.update({'url': url})
+    job.save()
     
 def set_finished():
     job.set_status('finished') 
     job.save()      
+    job.refresh()
     
 def set_failed():
     job.set_status('failed') 
