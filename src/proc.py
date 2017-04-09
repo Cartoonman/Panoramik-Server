@@ -7,7 +7,7 @@ from glob import glob
 import boto3
 import json
 import utils
-from cloudsight_handler import get_results
+import vision_api_handler
 
 # Utility Functions
 """
@@ -177,14 +177,17 @@ def run_process(filename, DEBUG=False):
     #Generate the subimages from the regions and image
     pathlist = generate_subimages(hulls, img, x_len, y_len)      
     
-    # Cloudsight Results
-    results = {} if DEBUG == True else get_results()  
+    # API Object Recognition Results
+    results = {} if DEBUG == True else vision_api_handler.get_results()  
     
     
     return_result = map(lambda y: {
                                     'status':results[y[0]][0], 
                                     'data':{
-                                        'cloudsight':results[y[0]][1], 
+                                        'cloudsight':results[y[0]][1],
+                                        'msft' : "",
+                                        'ibm' : "",
+                                        'google': "",
                                         'padded_coords':y[1],
                                         'coords':y[2], 
                                         'center':y[3]
