@@ -5,6 +5,7 @@ import math
 import os
 from glob import glob
 import boto3
+import json
 import utils
 from cloudsight_handler import get_results
 
@@ -77,7 +78,7 @@ def process_coords(coords, h, v):
     grouplist = filter(lambda x: utils.region_filter(x, h, v), coords)
     # We duplicate each entry in grouplist so groupRectangles will work properly
     grouplist = grouplist + grouplist    
-    grouplist, _ = cv2.groupRectangles(grouplist, 1, 0.05)   
+    grouplist = map(lambda x: [ int(y) for y in x ], cv2.groupRectangles(grouplist, 1, 0.05)[0])   
     rectlist = map(lambda x: (utils.pad_box(x, h, v, p), tuple(x)), grouplist)      
     return rectlist
     
@@ -177,7 +178,20 @@ def run_process(filename, DEBUG=False):
     pathlist = generate_subimages(hulls, img, x_len, y_len)      
     
     # Cloudsight Results
-    results = [] if DEBUG == True else get_results()  
+    results = {} if DEBUG == True else get_results()  
+    
+    
+    return_result = map(lambda y: {
+                                    'status':results[y[0]][0], 
+                                    'data':{
+                                        'cloudsight':results[y[0]][1], 
+                                        'padded_coords':y[1],
+                                        'coords':y[2], 
+                                        'center':y[3]
+                                        }
+                                     }, 
+                    filter(lambda x: x[0] in results, pathlist))
+    
 
     # Printing results for show
     cv2.polylines(img, hulls, 1, (0, 255, 0))
@@ -187,7 +201,7 @@ def run_process(filename, DEBUG=False):
         x1, y1, x2, y2 = x[2]
         center = x[3]
         cv2.circle(img, center, 3, (255, 255, 255), 2)
-        if results:
+        if x[0] in results:
             if results[x[0]][0] == 'completed':
                 cv2.rectangle(img,(x1, y1),(x2, y2),(255,0,0),2)
                 
@@ -207,8 +221,6 @@ def run_process(filename, DEBUG=False):
         else:
             cv2.rectangle(img,(x1, y1),(x2, y2),(255,0,0),2)
     
-    result = map(lambda y: (results[y[0]], y), filter(lambda x: x[0] in results, pathlist))
-    
     cv2.imwrite('uploads/result.jpg', img)
     
     # Upload result processed image to S3
@@ -218,5 +230,5 @@ def run_process(filename, DEBUG=False):
     utils.set_finished()
     
     # Return the results.
-    return result
+    return return_result
 
