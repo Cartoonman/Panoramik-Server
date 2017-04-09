@@ -176,12 +176,9 @@ def run_process(filename, DEBUG=False):
     #Generate the subimages from the regions and image
     pathlist = generate_subimages(hulls, img, x_len, y_len)      
     
-    results = []
-    
     # Cloudsight Results
-    if DEBUG == False:
-        results = get_results()  
- 
+    results = [] if DEBUG == True else get_results()  
+
     # Printing results for show
     cv2.polylines(img, hulls, 1, (0, 255, 0))
     
@@ -189,37 +186,37 @@ def run_process(filename, DEBUG=False):
     for x in pathlist:
         x1, y1, x2, y2 = x[2]
         center = x[3]
-        if not DEBUG:
-            if x[0] in results:
-                if results[x[0]][0] == 'completed':
-                    cv2.rectangle(img,(x1, y1),(x2, y2),(255,0,0),2)
-                else:
-                    cv2.rectangle(img,(x1, y1),(x2, y2),(0,0,255),2)
-                cv2.putText(img, results[x[0]][1], (x1, y1+15), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.CV_AA)
-                cv2.circle(img, center, 5, (255, 255, 255), 2)
+        cv2.circle(img, center, 3, (255, 255, 255), 2)
+        if results:
+            if results[x[0]][0] == 'completed':
+                cv2.rectangle(img,(x1, y1),(x2, y2),(255,0,0),2)
+                
+            else:
+                cv2.rectangle(img,(x1, y1),(x2, y2),(0,0,255),2)
+                
+                
+            t_x, t_y = cv2.getTextSize(results[x[0]][1], cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+            overlay = img.copy()
+            x_adj = max(0, (x1 + t_x) - x_len)
+            cv2.rectangle(overlay, (x1 - x_adj, y1),((x1 + t_x)-x_adj, y1 + t_y + 8),(0,0,0),-1)
+            cv2.addWeighted(overlay, 0.5, img, 1.0 - 0.5, 0, img)   
+             
+            cv2.putText(img, results[x[0]][1], (x1-x_adj, y1+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 
+                (255,255,255), 1, cv2.CV_AA)
                     
         else:
             cv2.rectangle(img,(x1, y1),(x2, y2),(255,0,0),2)
-            cv2.circle(img, center, 5, (255, 255, 255), 2)
-         
     
     result = map(lambda y: (results[y[0]], y), filter(lambda x: x[0] in results, pathlist))
     
     cv2.imwrite('uploads/result.jpg', img)
     
     # Upload result processed image to S3
-    upload_result(filename)
+    upload_result(filename.split('.')[0]+'.jpg')
        
     # Set flag to Finished for job
     utils.set_finished()
     
     # Return the results.
     return result
-
-
-
-
-
-
 
