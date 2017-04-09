@@ -2,12 +2,7 @@ from __future__ import division
 from rq import get_current_job
 job = get_current_job()
 
-               
-def image_size(f):    
-    size = reduce(lambda x,y: x*y, f.size)        
-    f.close()
-    return size  
-   
+
 def region_filter(c, h, v):
     x1, y1, x2, y2 = c
     width = x2-x1

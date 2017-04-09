@@ -87,15 +87,16 @@ def status_handler(job_id):
     if job_id:    
         job = q.fetch_job(job_id)    
         if job is not None:
+            
             job.refresh()
-            print job.get_status()
+            print job.result
             status = job.get_status()
             if (status == 'started'):
                 return jsonify({'status':"RUNNING",'message':"Please wait, processing",'progress':job.meta['progress'], 'state':job.meta['state']})
             elif status == 'queued':
                 return jsonify({'status':"WAIT",'message':"Please wait, queued"})
             elif status == 'finished':
-                return jsonify({'status':"DONE",'message':"Processing Completed. Data is attached.", 'data':job.result})
+                return jsonify({'status':"DONE",'message':"Processing Completed. Data is attached.", 'data':str(job.result)})
             elif status == 'failed':
                 return jsonify({'status':"FAIL", 'message': "Failed, error occured. Please check logs"})
         else:

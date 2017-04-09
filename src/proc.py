@@ -53,10 +53,12 @@ def generate_subimages(hulls, img, h, v, folder = '/tmp/'):
         # p_c = padded coordinates. c = coordinates.
         for p_c, c in process_coords(coords, h, v):    
             p_x1, p_y1, p_x2, p_y2 = p_c
+            x1, y1, x2, y2 = c
             roi=img[p_y1:p_y2, p_x1:p_x2]
             fid = fid + 1
             path = folder + str(fid) + '.jpg'
-            pathlist.append((path, c))
+            pathlist.append((path, p_c, c, (x1+((x2-x1)//2), y1 + ((y2-y1)//2))))
+            # Write subimage to file
             cv2.imwrite(path, roi)  
         
     return pathlist 
@@ -174,6 +176,7 @@ def run_process(filename, DEBUG=False):
     #Generate the subimages from the regions and image
     pathlist = generate_subimages(hulls, img, x_len, y_len)      
     
+    results = []
     
     # Cloudsight Results
     if DEBUG == False:
@@ -184,35 +187,36 @@ def run_process(filename, DEBUG=False):
     
     # Places rectangles and text on regions onto the image.
     for x in pathlist:
+        x1, y1, x2, y2 = x[2]
+        center = x[3]
         if not DEBUG:
             if x[0] in results:
                 if results[x[0]][0] == 'completed':
-                    rc = x[1]
-                    cv2.rectangle(img,(rc[0],rc[1]),(rc[2],rc[3]),(255,0,0),2)
-                    cv2.putText(img, results[x[0]][1], (rc[0],rc[1]+15), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.CV_AA)
+                    cv2.rectangle(img,(x1, y1),(x2, y2),(255,0,0),2)
                 else:
-                    rc = x[1]
-                    cv2.rectangle(img,(rc[0],rc[1]),(rc[2],rc[3]),(0,0,255),2)
-                    cv2.putText(img, results[x[0]][1], (rc[0],rc[1]+15), 
+                    cv2.rectangle(img,(x1, y1),(x2, y2),(0,0,255),2)
+                cv2.putText(img, results[x[0]][1], (x1, y1+15), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 1, cv2.CV_AA)
+                cv2.circle(img, center, 5, (255, 255, 255), 2)
+                    
         else:
-            rc = x[1]
-            cv2.rectangle(img,(rc[0],rc[1]),(rc[2],rc[3]),(255,0,0),2)
+            cv2.rectangle(img,(x1, y1),(x2, y2),(255,0,0),2)
+            cv2.circle(img, center, 5, (255, 255, 255), 2)
          
-
+    
+    result = map(lambda y: (results[y[0]], y), filter(lambda x: x[0] in results, pathlist))
+    
     cv2.imwrite('uploads/result.jpg', img)
     
     # Upload result processed image to S3
     upload_result(filename)
-    
-    
+       
     # Set flag to Finished for job
     utils.set_finished()
+    
     # Return the results.
-    print utils.job
-    print utils.job.meta
-    return 
+    return result
+
 
 
 
