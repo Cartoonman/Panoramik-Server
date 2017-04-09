@@ -42,9 +42,9 @@ threads = []
 resultdict = {}
 
 
-
 class MultiThreadException(Exception):
     pass
+    
 # Used to detect errors and to prevent hangups
 def fail_check():
     if is_failed():
