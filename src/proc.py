@@ -185,7 +185,7 @@ def run_process(filename, DEBUG=False):
                                     'status':results[y[0]][0], 
                                     'data':{
                                         'cloudsight':results[y[0]][1],
-                                        'msft' : "",
+                                        'msft' : results[y[0]][2],
                                         'ibm' : "",
                                         'google': "",
                                         'padded_coords':y[1],
