@@ -14,5 +14,6 @@ Pillow==4.0.0
 -e git+https://github.com/nvie/rq.git@5660f925ae99f4a13f0bb12414354836fa48dd25#egg=rq
 six==1.10.0
 redis==2.10.5
+watson-developer-cloud==0.25.2
 
 
