@@ -28,7 +28,9 @@ def google_fetch():
     # Call the api with image and store response object to retrieve response
     result = google_call_vision_api(image)
     # At this point we have our result
+    output = google_get_standardized_result(result)
     
+    print output
     #ibm_process_result(image,result)
     
     #cs_q.task_done()
@@ -86,10 +88,39 @@ def google_call_vision_api(image_filename):
     #print result.text to see a better format of this json
 
     print k
-
+    
     return k
+    
+    
+    
+    """
+    
+                 /-{cloudsight:{img1.jpg: fish, img2.jpg: water, ...}
+    maindict... /  {ibm:{img1.jpg: [(u'structure', 0.9267277), ...], img2.jpg: [(..)], ...}
+                \  {msft:{img1.jpg: [(..),(..),(tags,weight)], img2.jpg: [(..)], ...}
+                 \ {google:img1.jpg: [(..),(..),(tags,weight)], img2.jpg: [(..)], ...}
+    
+    or 
+    
+    
+                            {  /cloudsight: fish,                     }   
+                 { img1.jpg:{ /ibm: [(u'structure', 0.9267277), ...], }   < This denotes 1 dictionary of 4 keys, cloudsight, ibm, msft, and google
+                            { \msft: [(..),(..),(tags,weight)],       }
+                            {  \google: [(..),(..),(tags,weight)]     }
+                  
+                            {  /cloudsight: water,                    }
+       maindict<   img2.jpg:{ /ibm: [(..)],                           }
+                            { \msft: [(..)],                          }
+                            {  \google: [(..)]                        }
+                            
+                            .
+                            .
+                            .
 
-
+                            {  /cloudsight: apple,                    }
+                  imgn.jpg:{ /ibm: [(..,..), (..,..)],                }  } < this ends the outer layer dictionary
+                            { \msft: [(tags,weight),...],             }
+                            {  \google: (tags,weight),...]            }"""
 
 # See this function in microsoft.py for docs.
 def google_get_standardized_result(api_result):

@@ -39,16 +39,17 @@ def call_vision_api(image_filename):
 
     # Via example found here: 
     # https://github.com/watson-developer-cloud/python-sdk/blob/master/examples/visual_recognition_v3.py
-    visual_recognition = VisualRecognitionV3('2016-05-20', api_key=api_key)e wha
+    visual_recognition = VisualRecognitionV3('2016-05-20', api_key=api_key)
 
     with open(image_filename, 'rb') as image_file:
         result = visual_recognition.classify(images_file=image_file)
+    
+    
+    print result
 
-    text_result = json.dumps(result)
-    print text_resultthe c
     hello = None
 
-    hello = get_standardized_result(text_result)
+    hello = get_standardized_result(result)
 
     return hello
 
@@ -63,10 +64,11 @@ def get_standardized_result(api_result):
     if "error" in api_result:
         # Check for errorid
         output['tags'].append(("error-file-bigger-than-2mb", None))
-    """else:
+    else:
+        api_result = api_result['images'][0]
         api_result = api_result["classifiers"][0]
         for tag_data in api_result['classes']:
-            output['tags'].append((tag_data['class'], tag_data['score']))"""
+            output['tags'].append((tag_data['class'], tag_data['score']))
 
     print '11111111111111111111111111111111111111111111111111111111111111111111'
     print output

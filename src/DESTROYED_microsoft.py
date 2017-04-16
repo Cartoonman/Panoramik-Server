@@ -6,40 +6,40 @@ image = 'multiplechairs.jpg'
 
 def microsoft_fetch():
     global done
-    while(True):
-        """try:
-            # Retrieve a 'job' from the queue
-            image = msft_q.get(True,1)
-        except: # Occurs if q is empty
-            if FLAG and msft_q.empty() or BREAK:
-                # If FLAG is high (no more items being fed to queue) 
-                # and q is empty or BREAK is high due to error, quit
-                return
-            else:
-                # Go back to the top and try to fetch object
-                continue"""
+    #while(True):
+    """try:
+        # Retrieve a 'job' from the queue
+        image = msft_q.get(True,1)
+    except: # Occurs if q is empty
+        if FLAG and msft_q.empty() or BREAK:
+            # If FLAG is high (no more items being fed to queue) 
+            # and q is empty or BREAK is high due to error, quit
+            return
+        else:
+            # Go back to the top and try to fetch object
+            continue"""
 
         
-        # At this point, var image now contains the filepath for our subimage
-        # Initialize result object which will hold result from api call
-        result = None
+    # At this point, var image now contains the filepath for our subimage
+    # Initialize result object which will hold result from api call
+    result = None
 
-        # Call the api with image and store response object to retrieve response
-        result = call_vision_api(image)
-        # At this point we have our result
-        microsoft_process_result(image,result)
-        #cs_q.task_done()
-        continue
+    # Call the api with image and store response object to retrieve response
+    result = call_vision_api(image)
+    # At this point we have our result
+    microsoft_process_result(image,result)
+    #cs_q.task_done()
+    #continue
 
 # Process and store result retrieved from Microsoft API
 def microsoft_process_result(image, result):
     if result is None:
         return
-    print image
-
-    print result['tags']
+    print result
+    output = get_standardized_result(result)
+    print output
     #Process completed
-    resultdict[image]['msft'] = result['tags']
+    #resultdict[image]['msft'] = result['tags']
 
 
 def call_vision_api(image_filename):
@@ -51,6 +51,7 @@ def call_vision_api(image_filename):
     result.raise_for_status()
     
     j = json.loads(result.text)
+    print j
     return j
 
 # Return a dictionary of features to their scored values (represented as lists of tuples).mu
