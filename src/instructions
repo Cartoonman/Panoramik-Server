@@ -1,0 +1,8 @@
+./norama-direct -P -i "/home/eclippse/Desktop/stream.jpg" -o "/home/eclippse/Desktop/output.jpg" -X 1000 -Y 1000 -k 500 -l 500 -a 90 -e 30 -r 30 -u 90
+
+-a 90 -e 0 -r 0 -u 0    
+
+u= field of view
+a= horizontal angle
+e= elevation (0=straight, 90=ceiling, -90=right beneath the camera)butt
+r= rotation of image(leave as 0 degrees)y
