@@ -16,6 +16,7 @@ import json
 import requests
 from collections import defaultdict
 
+
 # Number of Max Concurrent Threads
 concurrent = 5
 
@@ -385,6 +386,7 @@ def ibm_get_standardized_result(api_result):
     ibm_fetch()  """
 
 #########################################################################################   GOOGLE  @@@@@@@@@@@@@@@@@@
+
 def google_fetch():
     global done
     #while(True):
@@ -405,12 +407,25 @@ def google_fetch():
     # Initialize result object which will hold result from api call
     result = None
 
+    i=0         #count how many files
 
-    # Call the api with image and store response object to retrieve response
-    result = google_call_vision_api(image)
-    # At this point we have our result
-    
-    google_process_result(image,result)
+    for filename in glob('/home/eclippse/Desktop/tmp/*.jpg'): 
+        result = google_call_vision_api(filename)
+        i = i +1
+        google_process_result(filename,result)
+
+    print i 
+
+
+
+
+    """path1 = "/home/eclippse/Desktop/tmp/"
+    for filename in path1:
+        call something..........
+        # Call the api with image and store response object to retrieve response
+        result = google_call_vision_api(im)
+        # At this point we have our result
+        google_process_result(im,result)"""
     
     #cs_q.task_done()
     #continue
@@ -441,9 +456,9 @@ def google_process_result(image, result):
 
     resultdict[image]['google'] = c
 
-    print '2222222222222222222222222222222222222222222'
     print resultdict[image]['google']
-
+    print '2222222222222222222222222222222222222222222222222222 FINISHED'
+    
 
 def _convert_image_to_base64(image_filename):
     with open(image_filename, 'rb') as image_file:
@@ -496,7 +511,7 @@ def google_call_vision_api(image_filename):
 
     #print result.text to see a better format of this json
 
-    #print k
+    
     #print '1111111111111111111111111111111111111111111111111111111111'
 
     return k
@@ -528,11 +543,11 @@ def google_get_standardized_result(api_result):
 if __name__ == '__main__': 
     #cloudsight_fetch()
 
-    microsoft_fetch()
-    print '3333333333333333333333333333333333333333'
-    ibm_fetch()
+    #microsoft_fetch()
+    #print '3333333333333333333333333333333333333333'
+    #ibm_fetch()
     print '44444444444444444444444444444444444444444444444444'
-    google_fetch()  
+    google_fetch()
 
 
 
