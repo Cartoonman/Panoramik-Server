@@ -160,6 +160,10 @@ This is the MAIN PROCESS function which runs during worker operation. This is
 considered the PARENT thread. Takes in input filename to fetch from S3 server, and
 does all image processing and handling in this function.
 """
+def k(x):
+    print x
+
+
 def run_process(filename, DEBUG=False):
     # Fetch Image from S3
     img = get_image(filename)
@@ -180,9 +184,9 @@ def run_process(filename, DEBUG=False):
     # API Object Recognition Results
     results = {} if DEBUG == True else vision_api_handler.get_results()  
     
+    print pathlist
     
-    return_result = map(lambda y: {
-                                    'status':results[y[0]][0], 
+    """return_result = map(lambda y: {'status':results[y[0]][0], 
                                     'data':{
                                         'cloudsight':results[y[0]][1],
                                         'msft' : results[y[0]][2],
@@ -193,32 +197,35 @@ def run_process(filename, DEBUG=False):
                                         'center':y[3]
                                         }
                                      }, 
-                    filter(lambda x: x[0] in results, pathlist))
+                    filter(lambda x: k(x), pathlist))"""
     
 
     # Printing results for show
     cv2.polylines(img, hulls, 1, (0, 255, 0))
     
     # Places rectangles and text on regions onto the image.
+    
+    
     for x in pathlist:
         x1, y1, x2, y2 = x[2]
         center = x[3]
         cv2.circle(img, center, 3, (255, 255, 255), 2)
         if x[0] in results:
-            if results[x[0]][0] == 'completed':
+            data = results[x[0]]['cloudsight']
+            if data[0] == 'completed':
                 cv2.rectangle(img,(x1, y1),(x2, y2),(255,0,0),2)
                 
             else:
                 cv2.rectangle(img,(x1, y1),(x2, y2),(0,0,255),2)
                 
                 
-            t_x, t_y = cv2.getTextSize(results[x[0]][1], cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+            t_x, t_y = cv2.getTextSize(data[1], cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
             overlay = img.copy()
             x_adj = max(0, (x1 + t_x) - x_len)
             cv2.rectangle(overlay, (x1 - x_adj, y1),((x1 + t_x)-x_adj, y1 + t_y + 8),(0,0,0),-1)
             cv2.addWeighted(overlay, 0.5, img, 1.0 - 0.5, 0, img)   
              
-            cv2.putText(img, results[x[0]][1], (x1-x_adj, y1+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 
+            cv2.putText(img, data[1], (x1-x_adj, y1+15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, 
                 (255,255,255), 1, cv2.CV_AA)
                     
         else:
@@ -233,5 +240,5 @@ def run_process(filename, DEBUG=False):
     utils.set_finished()
     
     # Return the results.
-    return return_result
+    return results
 
