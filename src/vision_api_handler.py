@@ -6,7 +6,7 @@ import time
 import os
 from Queue import Queue
 from glob import glob
-from utils import update_progress, set_failed, is_failed
+from utils import update_progress, set_failed, is_failed, update_data
 
 import cv2
 import operator
@@ -142,6 +142,8 @@ def cloudsight_process_result(image, result):
         resultdict[image]['cloudsight'] = (result['status'], result['name'])
     else:
         resultdict[image]['cloudsight'] = (result['status'], result['reason'])
+    update_data(resultdict)
+    
 
 def get_results():
     update_progress('Fetching Object Recognition Results')
@@ -388,7 +390,6 @@ def ibm_get_standardized_result(api_result):
 #########################################################################################   GOOGLE  @@@@@@@@@@@@@@@@@@
 
 def google_fetch():
-    global done
     #while(True):
     """try:
         # Retrieve a 'job' from the queue

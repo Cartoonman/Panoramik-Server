@@ -186,18 +186,9 @@ def run_process(filename, DEBUG=False):
     
     print pathlist
     
-    """return_result = map(lambda y: {'status':results[y[0]][0], 
-                                    'data':{
-                                        'cloudsight':results[y[0]][1],
-                                        'msft' : results[y[0]][2],
-                                        'ibm' : "",
-                                        'google': "",
-                                        'padded_coords':y[1],
-                                        'coords':y[2], 
-                                        'center':y[3]
-                                        }
-                                     }, 
-                    filter(lambda x: k(x), pathlist))"""
+    return_result = map(lambda x: (results[x[0]],x) , filter(lambda x: x[0] in results, pathlist))
+    
+
     
 
     # Printing results for show
@@ -240,5 +231,5 @@ def run_process(filename, DEBUG=False):
     utils.set_finished()
     
     # Return the results.
-    return results
+    return return_result
 

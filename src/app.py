@@ -24,7 +24,7 @@ def s3_upload(filename):
         
         
 def run_analysis(filename, DEBUG=False):
-    context = {'progress': 0, 'state': "Ready", 'url': ""}
+    context = {'progress': 0, 'state': "Ready", 'url': "", 'data': {}}
     job = Job.create(func = proc.run_process, args = [filename, DEBUG], connection = conn, meta = context)
     q.enqueue_job(job)
     return job
@@ -78,7 +78,7 @@ def get_status():
 
     else:
         return status
-     
+
     
     
     
@@ -90,7 +90,10 @@ def status_handler(job_id):
             job.refresh()
             status = job.get_status()
             if (status == 'started'):
-                return jsonify({'status':"RUNNING",'message':"Please wait, processing",'progress':job.meta['progress'], 'state':job.meta['state']})
+                if job.meta['state'] == "Fetching Object Recognition Results":
+                    return jsonify({'status':"RUNNING",'message':"Please wait, processing",'progress':job.meta['progress'], 'state':job.meta['state'], 'data':job.meta['data']})
+                else:
+                    return jsonify({'status':"RUNNING",'message':"Please wait, processing",'progress':job.meta['progress'], 'state':job.meta['state']})
             elif status == 'queued':
                 return jsonify({'status':"WAIT",'message':"Please wait, queued"})
             elif status == 'finished':

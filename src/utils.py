@@ -54,6 +54,9 @@ def update_progress(state=None, cs=0):
         job.meta['state'] = state
     job.save()
 
+def update_data(data):
+    job.meta.update({'data': data})
+    job.save()
 
 def set_url(url):
     job.meta.update({'url': url})
